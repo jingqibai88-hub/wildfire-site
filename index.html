@@ -14,8 +14,8 @@
       --border: rgba(255,255,255,.12);
       --text:#f5f5f7;
       --muted: rgba(245,245,247,.7);
-      --accent:#ff3b30;   /* 火焰红 */
-      --accent2:#ff9f0a;  /* 火焰橙 */
+      --accent:#ff3b30;
+      --accent2:#ff9f0a;
       --ok:#34c759;
       --shadow: 0 18px 60px rgba(0,0,0,.45);
       --radius: 18px;
@@ -36,18 +36,52 @@
     a{color:inherit}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
 
+    /* 更像官网：平滑锚点滚动 */
+    html{ scroll-behavior:smooth; }
+
+    /* ===== 顶部加载进度条（Apple 风：细、克制） ===== */
+    .top-progress{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:2px;
+      z-index:10000;
+      pointer-events:none;
+      background: transparent;
+    }
+    .top-progress .bar{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background: linear-gradient(90deg,
+        rgba(245,245,247,.35),
+        rgba(245,245,247,.75),
+        rgba(255,159,10,.75)
+      );
+      box-shadow: 0 0 14px rgba(255,255,255,.18);
+      transition: width .18s ease;
+      opacity:.92;
+    }
+    .top-progress.done{
+      opacity:0;
+      transition: opacity .35s ease;
+    }
+
     header{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
       background: rgba(11,11,15,.55);
       border-bottom:1px solid var(--border);
     }
+    header.scrolled{
+      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+      background: rgba(11,11,15,.70);
+    }
+
     .nav{
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 0;
       gap:12px;
     }
-
     .brand{
       display:flex; align-items:center; gap:12px;
       font-weight:800; letter-spacing:.5px;
@@ -71,8 +105,23 @@
     .links a{
       text-decoration:none; font-size:14px; color:var(--muted);
       padding:6px 10px; border-radius:999px;
+      position:relative;
     }
     .links a:hover{background:var(--panel2); color:var(--text)}
+    .links a::after{
+      content:"";
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:4px;
+      height:2px;
+      border-radius:999px;
+      background: linear-gradient(90deg, transparent, rgba(255,159,10,.55), transparent);
+      transform: scaleX(0);
+      transform-origin:center;
+      transition: transform .25s ease;
+    }
+    .links a:hover::after{ transform: scaleX(1); }
 
     .lang-switch{
       display:flex;
@@ -98,7 +147,30 @@
       font-weight:700;
     }
 
-    .hero{padding:44px 0 10px}
+    .hero{padding:44px 0 10px; position:relative;}
+    /* ===== Hero 极淡动态光晕（Apple 风：柔和、慢速） ===== */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-90px -60px -90px -60px;
+      background:
+        radial-gradient(700px 260px at 12% 10%, rgba(255,255,255,.09), transparent 60%),
+        radial-gradient(740px 280px at 70% 25%, rgba(255,159,10,.12), transparent 62%),
+        radial-gradient(860px 320px at 40% 80%, rgba(255,59,48,.10), transparent 66%);
+      filter: blur(24px);
+      opacity:.55;
+      transform: translate3d(0,0,0);
+      animation: aurora 16s ease-in-out infinite alternate;
+      pointer-events:none;
+      z-index:0;
+    }
+    @keyframes aurora{
+      0%   { transform: translate3d(-8px, 6px, 0) scale(1.02); opacity:.48; }
+      50%  { transform: translate3d(10px, -8px, 0) scale(1.03); opacity:.58; }
+      100% { transform: translate3d(-4px, 10px, 0) scale(1.02); opacity:.52; }
+    }
+    .hero .wrap{ position:relative; z-index:1; }
+
     .hero-grid{
       display:grid; gap:18px;
       grid-template-columns: 1.2fr .8fr;
@@ -147,6 +219,26 @@
     .btn-ghost{background: rgba(255,255,255,.06); color:var(--text)}
     .btn:hover{transform: translateY(-1px)}
 
+    /* 亮面扫光（更“官网”） */
+    .btn-primary::before{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-120%;
+      width:70%;
+      height:180%;
+      transform: rotate(18deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+      opacity:0;
+      transition: left .55s ease, opacity .25s ease;
+      pointer-events:none;
+    }
+    .btn-primary:hover::before{
+      left:140%;
+      opacity:1;
+    }
+
+    /* CTA 火焰脉冲（保留） */
     .btn-primary::after{
       content:"";
       position:absolute;
@@ -160,6 +252,7 @@
       to{transform:scale(1.4); opacity:.25}
     }
 
+    /* Hero 标题发光（保留） */
     .hero h1{
       text-shadow:
         0 0 12px rgba(255,59,48,.35),
@@ -325,19 +418,30 @@
     }
     .small{font-size:12px; color:rgba(245,245,247,.55)}
 
-    /* ====== ✅ 新增：海报全屏预览 Modal ====== */
+    /* 海报全屏预览 Modal */
     .modal{
       position:fixed;
       inset:0;
-      display:none;
+      display:flex;
       align-items:center;
       justify-content:center;
       padding:18px;
       background: rgba(0,0,0,.72);
       z-index:9999;
       backdrop-filter: blur(6px);
+
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transform: scale(.985);
+      transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
     }
-    .modal.open{display:flex;}
+    .modal.open{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transform: scale(1);
+    }
     .modal-inner{
       width:min(980px, 100%);
       max-height: 92vh;
@@ -347,7 +451,12 @@
       background: rgba(15,15,20,.55);
       box-shadow: 0 22px 80px rgba(0,0,0,.6);
       overflow:hidden;
+
+      transform: translateY(8px);
+      transition: transform .22s ease;
     }
+    .modal.open .modal-inner{ transform: translateY(0); }
+
     .modal-bar{
       display:flex;
       align-items:center;
@@ -396,405 +505,507 @@
       color: rgba(245,245,247,.65);
       padding:0 14px 12px;
     }
+
+    /* 官方 reveal 动画 */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      filter: blur(2px);
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0);
+      filter: blur(0);
+      transition: opacity .7s ease, transform .7s ease, filter .7s ease;
+    }
+    .reveal.stagger-1{ transition-delay:.04s; }
+    .reveal.stagger-2{ transition-delay:.08s; }
+    .reveal.stagger-3{ transition-delay:.12s; }
+    .reveal.stagger-4{ transition-delay:.16s; }
+    .reveal.stagger-5{ transition-delay:.20s; }
+
+    /* 官方标准：可访问焦点圈 */
+    :focus-visible{
+      outline: 2px solid rgba(255,159,10,.75);
+      outline-offset: 2px;
+      border-radius: 10px;
+    }
+
+    /* 系统减少动画：自动降级 */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      *{ animation:none !important; transition:none !important; }
+      .reveal{ opacity:1; transform:none; filter:none; }
+      .top-progress{ display:none; }
+    }
   </style>
 </head>
 
 <body>
-<header>
-  <div class="wrap">
-    <div class="nav">
-      <div class="brand">
-        <span style="font-size:18px" data-cn="🔥 野火社" data-en="🔥 Wildfire">🔥 野火社</span>
-        <span class="badge">Auto Service Club · Malaysia</span>
-      </div>
-
-      <nav class="links">
-        <a href="#pain" data-cn="你遇到的问题" data-en="Problems">你遇到的问题</a>
-        <a href="#about" data-cn="我们是谁" data-en="About">我们是谁</a>
-        <a href="#benefits" data-cn="我们能给你什么" data-en="Benefits">我们能给你什么</a>
-        <a href="#join" data-cn="加入我们" data-en="Join">加入我们</a>
-
-        <div class="lang-switch">
-          <button class="active" onclick="setLang('cn', this)">中文</button>
-          <button onclick="setLang('en', this)">EN</button>
-        </div>
-      </nav>
-    </div>
+  <!-- 顶部加载进度条 -->
+  <div class="top-progress" id="topProgress" aria-hidden="true">
+    <div class="bar" id="topProgressBar"></div>
   </div>
-</header>
 
-<main>
-  <div class="hero">
+  <header>
     <div class="wrap">
-      <div class="hero-grid">
+      <div class="nav">
+        <div class="brand">
+          <span style="font-size:18px" data-cn="🔥 野火社" data-en="🔥 Wildfire">🔥 野火社</span>
+          <span class="badge">Auto Service Club · Malaysia</span>
+        </div>
 
-        <div class="card hero-card">
-          <span class="kicker"
-                data-cn="🚘 马来西亚留学生汽车俱乐部 · 新手友好"
-                data-en="🚘 Student Car Club in Malaysia · Beginner-friendly">
-            🚘 马来西亚留学生汽车俱乐部 · 新手友好
-          </span>
+        <nav class="links">
+          <a href="#pain" data-cn="你遇到的问题" data-en="Problems">你遇到的问题</a>
+          <a href="#about" data-cn="我们是谁" data-en="About">我们是谁</a>
+          <a href="#benefits" data-cn="我们能给你什么" data-en="Benefits">我们能给你什么</a>
+          <a href="#join" data-cn="加入我们" data-en="Join">加入我们</a>
 
-          <h1
-            data-cn="一起进群，<br/>一起把车玩明白"
-            data-en="Join the group,<br/>and truly understand your car">
-            一起进群，<br/>一起把车玩明白
-          </h1>
+          <div class="lang-switch">
+            <button class="active" onclick="setLang('cn', this)">中文</button>
+            <button onclick="setLang('en', this)">EN</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
 
-          <p class="sub"
-             data-cn="修车被宰？不懂行情不敢进车行？想改车/养车却没人交流？<b style='color:#fff'>野火社</b>给你一个留学生自己人的汽车圈子：真实经验、避坑参考、车主交流。"
-             data-en="Afraid of being overcharged? Not sure about workshop prices? Want to maintain/mod your car but have no one to talk to? <b style='color:#fff'>Wildfire</b> is a student-owned car community: real experience, price references, and meetups.">
-            修车被宰？不懂行情不敢进车行？想改车/养车却没人交流？
-            <b style="color:#fff">野火社</b>给你一个留学生自己人的汽车圈子：真实经验、避坑参考、车主交流。
+  <main>
+    <div class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+
+          <div class="card hero-card">
+            <span class="kicker"
+                  data-cn="🚘 马来西亚留学生汽车俱乐部 · 新手友好"
+                  data-en="🚘 Student Car Club in Malaysia · Beginner-friendly">
+              🚘 马来西亚留学生汽车俱乐部 · 新手友好
+            </span>
+
+            <h1
+              data-cn="一起进群，<br/>一起把车玩明白"
+              data-en="Join the group,<br/>and truly understand your car">
+              一起进群，<br/>一起把车玩明白
+            </h1>
+
+            <p class="sub"
+               data-cn="修车被宰？不懂行情不敢进车行？想改车/养车却没人交流？<b style='color:#fff'>野火社</b>给你一个留学生自己人的汽车圈子：真实经验、避坑参考、车主交流。"
+               data-en="Afraid of being overcharged? Not sure about workshop prices? Want to maintain/mod your car but have no one to talk to? <b style='color:#fff'>Wildfire</b> is a student-owned car community: real experience, price references, and meetups.">
+              修车被宰？不懂行情不敢进车行？想改车/养车却没人交流？
+              <b style="color:#fff">野火社</b>给你一个留学生自己人的汽车圈子：真实经验、避坑参考、车主交流。
+            </p>
+
+            <div class="cta-row">
+              <a class="btn btn-primary"
+                 href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
+                 target="_blank"
+                 data-cn="🔥 立即加入 / WhatsApp 进群"
+                 data-en="🔥 Join now / WhatsApp">
+                🔥 立即加入 / WhatsApp 进群
+              </a>
+
+              <span class="btn btn-ghost"
+                    data-cn="📩 微信 v：Sn20xxf"
+                    data-en="📩 WeChat: Sn20xxf">
+                📩 微信 v：Sn20xxf
+              </span>
+
+              <a class="btn btn-ghost"
+                 href="#benefits"
+                 data-cn="看看我们能做什么"
+                 data-en="See what we offer">
+                看看我们能做什么
+              </a>
+            </div>
+
+            <div class="pill-row">
+              <span class="pill" data-cn="✅ 新手友好" data-en="✅ Beginner-friendly">✅ 新手友好</span>
+              <span class="pill" data-cn="🧾 价格参考" data-en="🧾 Price reference">🧾 价格参考</span>
+              <span class="pill" data-cn="🤝 约跑/聚会" data-en="🤝 Meets & cruises">🤝 约跑/聚会</span>
+            </div>
+
+            <div class="stats">
+              <div class="stat">
+                <b data-cn="真实经验" data-en="Real experience">真实经验</b>
+                <span data-cn="修车 / 保养 / 轮胎分享" data-en="Service / maintenance / tyres">修车 / 保养 / 轮胎分享</span>
+              </div>
+              <div class="stat">
+                <b data-cn="车行避坑" data-en="Avoid traps">车行避坑</b>
+                <span data-cn="价格参考 & 不踩雷" data-en="Price reference & no scams">价格参考 & 不踩雷</span>
+              </div>
+              <div class="stat">
+                <b data-cn="交流聚会" data-en="Meetups">交流聚会</b>
+                <span data-cn="约跑 / 聚会 / 车友社交" data-en="Cruises / meets / friends">约跑 / 聚会 / 车友社交</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <span class="pill-dash"
+                  data-cn="📍 活动范围：KL / Kajang / Puchong / PJ（也欢迎全马留学生）"
+                  data-en="📍 Coverage: KL / Kajang / Puchong / PJ (all Malaysia students welcome)">
+              📍 活动范围：KL / Kajang / Puchong / PJ（也欢迎全马留学生）
+            </span>
+          </div>
+
+          <div class="card poster-card">
+            <a class="poster-link" href="poster.png" onclick="openPoster(event)">
+              <img class="poster-img"
+                   id="posterThumb"
+                   src="poster.png"
+                   alt="野火社海报"
+                   loading="lazy"
+                   decoding="async"
+                   onerror="this.style.display='none';document.getElementById('ph').style.display='block';">
+            </a>
+
+            <div id="ph" class="placeholder" style="display:none">
+              <b data-cn="这里放海报图" data-en="Poster goes here">这里放海报图</b><br/>
+              <span data-cn="把海报图片放到同目录并命名为" data-en="Put your poster in the same folder and name it">
+                把海报图片放到同目录并命名为
+              </span>
+              <code>poster.png</code>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <section class="quick">
+      <div class="wrap">
+        <h2 data-cn="新手快速入口（群里常用）"
+            data-en="Quick shortcuts (most used in group)">
+          新手快速入口（群里常用）
+        </h2>
+
+        <div class="grid-3">
+          <div class="card item">
+            <div class="icon">📌</div>
+            <h3 data-cn="新手必读" data-en="Beginner checklist">新手必读</h3>
+            <p class="mini"
+               data-cn="第一次买车/刚落地？我们整理了：验车要点、常见坑、必做保养。"
+               data-en="First car in Malaysia? We compiled inspection tips, common traps, and essential maintenance.">
+              第一次买车/刚落地？我们整理了：验车要点、常见坑、必做保养。
+            </p>
+          </div>
+
+          <div class="card item">
+            <div class="icon">💰</div>
+            <h3 data-cn="保养/维修价格参考" data-en="Service price reference">保养/维修价格参考</h3>
+            <p class="mini"
+               data-cn="机油、刹车、轮胎、避震…常见项目大概多少钱，心里有数不怕宰。"
+               data-en="Oil, brakes, tyres, suspension… typical price ranges so you won’t get overcharged.">
+              机油、刹车、轮胎、避震…常见项目大概多少钱，心里有数不怕宰。
+            </p>
+          </div>
+
+          <div class="card item">
+            <div class="icon">🗓️</div>
+            <h3 data-cn="近期活动/约跑" data-en="Upcoming meets">近期活动/约跑</h3>
+            <p class="mini"
+               data-cn="KL / Kajang / Bangi / PJ 不定期小聚：咖啡+车聊+拍照。"
+               data-en="Casual meets in KL / Kajang / Bangi / PJ: coffee, car talk, and photos.">
+              KL / Kajang / Bangi / PJ 不定期小聚：咖啡+车聊+拍照。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pain">
+      <div class="wrap">
+        <div class="section-title">
+          <h2 data-cn="在马来西亚留学，你是不是也遇到过这些问题？"
+              data-en="Studying in Malaysia? Have you faced these problems too?">
+            在马来西亚留学，你是不是也遇到过这些问题？
+          </h2>
+          <p></p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card item">
+            <div class="icon">🧾</div>
+            <h3 data-cn="修车被宰 / 乱报价" data-en="Overcharged / random pricing">修车被宰 / 乱报价</h3>
+            <p data-cn="不懂行情、怕被坑，进车行像开盲盒。"
+               data-en="No price sense—every workshop feels like a gamble.">
+              不懂行情、怕被坑，进车行像开盲盒。
+            </p>
+          </div>
+          <div class="card item">
+            <div class="icon">😶‍🌫️</div>
+            <h3 data-cn="不敢进车行" data-en="Afraid to visit workshops">不敢进车行</h3>
+            <p data-cn="术语听不懂、流程不熟，担心被“讲到怕”。"
+               data-en="Terms and process are confusing—worried you’ll be talked into things.">
+              术语听不懂、流程不熟，担心被“讲到怕”。
+            </p>
+          </div>
+          <div class="card item">
+            <div class="icon">🤝</div>
+            <h3 data-cn="想玩车却没人一起" data-en="Want car friends to roll with">想玩车却没人一起</h3>
+            <p data-cn="想改车/养车/约跑，但周围没人能聊、没人带。"
+               data-en="Want mods/meets, but no one to guide you.">
+              想改车/养车/约跑，但周围没人能聊、没人带。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="section-title">
+          <h2 data-cn="我们是谁？" data-en="Who are we?">我们是谁？</h2>
+          <p data-cn="不卖车、不割韭菜，只讲真实经验"
+             data-en="No selling, no scams—real experience only">
+            不卖车、不割韭菜，只讲真实经验
           </p>
+        </div>
+
+        <div class="two-col">
+          <div class="card item">
+            <div class="icon">🔥</div>
+            <h3 data-cn="野火社 Auto Service Club" data-en="Wildfire Auto Service Club">野火社 Auto Service Club</h3>
+            <p
+              data-cn="一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，都能在这里找到同路人。"
+              data-en="A car community built by international students in Malaysia—first cars, daily driving, performance, and mods.">
+              一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，
+              都能在这里找到同路人。
+            </p>
+            <ul>
+              <li data-cn="懂修车的 / 玩轮胎、避震、改装的"
+                  data-en="Maintenance / tyres / suspension / mods">
+                懂修车的 / 玩轮胎、避震、改装的
+              </li>
+              <li data-cn="日常代步 & 性能玩家"
+                  data-en="Daily drivers & performance lovers">
+                日常代步 & 性能玩家
+              </li>
+              <li data-cn="走过弯路的人，拉你少走弯路"
+                  data-en="We’ve learned the hard way—so you don’t have to.">
+                走过弯路的人，拉你少走弯路
+              </li>
+            </ul>
+          </div>
+
+          <div class="card item" id="benefits">
+            <div class="icon">✅</div>
+            <h3 data-cn="我们能给你什么？" data-en="What you’ll get">我们能给你什么？</h3>
+            <ul>
+              <li data-cn="真实修车 / 保养 / 轮胎经验分享" data-en="Real service / maintenance / tyre tips">真实修车 / 保养 / 轮胎经验分享</li>
+              <li data-cn="车行避坑 & 价格参考（少踩雷）" data-en="Workshop red flags & price references">车行避坑 & 价格参考（少踩雷）</li>
+              <li data-cn="车主交流、约跑、聚会" data-en="Chats, meets, cruises">车主交流、约跑、聚会</li>
+              <li data-cn="新手友好｜不懂车也欢迎" data-en="Beginner-friendly—no car knowledge needed">新手友好｜不懂车也欢迎</li>
+              <li data-cn="留学生自己人的“养车圈子”" data-en="A student-owned car circle">留学生自己人的“养车圈子”</li>
+            </ul>
+            <div style="margin-top:12px">
+              <span class="tag"
+                    data-cn="🏁 超省钱 · 想玩车 · 想社交"
+                    data-en="🏁 Save money · Enjoy cars · Make friends">
+                🏁 超省钱 · 想玩车 · 想社交
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="join">
+      <div class="wrap">
+        <div class="cta">
+          <div>
+            <strong
+              data-cn="那你一定要认识我们 —— 野火社 Auto Service Club"
+              data-en="Then you should definitely meet us — Wildfire Auto Service Club">
+              那你一定要认识我们 —— 野火社 Auto Service Club
+            </strong>
+            <div style="color:var(--muted); margin-top:4px"
+                 data-cn="一起把车玩明白 🔥"
+                 data-en="Let’s truly understand cars 🔥">
+              一起把车玩明白 🔥
+            </div>
+          </div>
 
           <div class="cta-row">
             <a class="btn btn-primary"
                href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
                target="_blank"
-               data-cn="🔥 立即加入 / WhatsApp 进群"
-               data-en="🔥 Join now / WhatsApp">
-              🔥 立即加入 / WhatsApp 进群
+               data-cn="🚗 加入 WhatsApp 群"
+               data-en="🚗 Join WhatsApp group">
+              🚗 加入 WhatsApp 群
             </a>
-
             <span class="btn btn-ghost"
                   data-cn="📩 微信 v：Sn20xxf"
                   data-en="📩 WeChat: Sn20xxf">
               📩 微信 v：Sn20xxf
             </span>
-
-            <a class="btn btn-ghost"
-               href="#benefits"
-               data-cn="看看我们能做什么"
-               data-en="See what we offer">
-              看看我们能做什么
-            </a>
-          </div>
-
-          <div class="pill-row">
-            <span class="pill" data-cn="✅ 新手友好" data-en="✅ Beginner-friendly">✅ 新手友好</span>
-            <span class="pill" data-cn="🧾 价格参考" data-en="🧾 Price reference">🧾 价格参考</span>
-            <span class="pill" data-cn="🤝 约跑/聚会" data-en="🤝 Meets & cruises">🤝 约跑/聚会</span>
-          </div>
-
-          <div class="stats">
-            <div class="stat">
-              <b data-cn="真实经验" data-en="Real experience">真实经验</b>
-              <span data-cn="修车 / 保养 / 轮胎分享" data-en="Service / maintenance / tyres">修车 / 保养 / 轮胎分享</span>
-            </div>
-            <div class="stat">
-              <b data-cn="车行避坑" data-en="Avoid traps">车行避坑</b>
-              <span data-cn="价格参考 & 不踩雷" data-en="Price reference & no scams">价格参考 & 不踩雷</span>
-            </div>
-            <div class="stat">
-              <b data-cn="交流聚会" data-en="Meetups">交流聚会</b>
-              <span data-cn="约跑 / 聚会 / 车友社交" data-en="Cruises / meets / friends">约跑 / 聚会 / 车友社交</span>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <span class="pill-dash"
-                data-cn="📍 活动范围：KL / Kajang / Puchong / PJ（也欢迎全马留学生）"
-                data-en="📍 Coverage: KL / Kajang / Puchong / PJ (all Malaysia students welcome)">
-            📍 活动范围：KL / Kajang / Puchong / PJ（也欢迎全马留学生）
-          </span>
-        </div>
-
-        <div class="card poster-card">
-          <!-- ✅ 点击打开全屏预览（不再跳新窗口） -->
-          <a class="poster-link" href="poster.png" onclick="openPoster(event)">
-            <img class="poster-img"
-                 id="posterThumb"
-                 src="poster.png"
-                 alt="野火社海报"
-                 loading="lazy"
-                 decoding="async"
-                 onerror="this.style.display='none';document.getElementById('ph').style.display='block';">
-          </a>
-
-          <div id="ph" class="placeholder" style="display:none">
-            <b data-cn="这里放海报图" data-en="Poster goes here">这里放海报图</b><br/>
-            <span data-cn="把海报图片放到同目录并命名为" data-en="Put your poster in the same folder and name it">
-              把海报图片放到同目录并命名为
-            </span>
-            <code>poster.png</code>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <section class="quick">
-    <div class="wrap">
-      <h2 data-cn="新手快速入口（群里常用）"
-          data-en="Quick shortcuts (most used in group)">
-        新手快速入口（群里常用）
-      </h2>
-
-      <div class="grid-3">
-        <div class="card item">
-          <div class="icon">📌</div>
-          <h3 data-cn="新手必读" data-en="Beginner checklist">新手必读</h3>
-          <p class="mini"
-             data-cn="第一次买车/刚落地？我们整理了：验车要点、常见坑、必做保养。"
-             data-en="First car in Malaysia? We compiled inspection tips, common traps, and essential maintenance.">
-            第一次买车/刚落地？我们整理了：验车要点、常见坑、必做保养。
-          </p>
-        </div>
-
-        <div class="card item">
-          <div class="icon">💰</div>
-          <h3 data-cn="保养/维修价格参考" data-en="Service price reference">保养/维修价格参考</h3>
-          <p class="mini"
-             data-cn="机油、刹车、轮胎、避震…常见项目大概多少钱，心里有数不怕宰。"
-             data-en="Oil, brakes, tyres, suspension… typical price ranges so you won’t get overcharged.">
-            机油、刹车、轮胎、避震…常见项目大概多少钱，心里有数不怕宰。
-          </p>
-        </div>
-
-        <div class="card item">
-          <div class="icon">🗓️</div>
-          <h3 data-cn="近期活动/约跑" data-en="Upcoming meets">近期活动/约跑</h3>
-          <p class="mini"
-             data-cn="KL / Kajang / Bangi / PJ 不定期小聚：咖啡+车聊+拍照。"
-             data-en="Casual meets in KL / Kajang / Bangi / PJ: coffee, car talk, and photos.">
-            KL / Kajang / Bangi / PJ 不定期小聚：咖啡+车聊+拍照。
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="pain">
-    <div class="wrap">
-      <div class="section-title">
-        <h2 data-cn="在马来西亚留学，你是不是也遇到过这些问题？"
-            data-en="Studying in Malaysia? Have you faced these problems too?">
-          在马来西亚留学，你是不是也遇到过这些问题？
-        </h2>
-        <p></p>
-      </div>
-
-      <div class="grid-3">
-        <div class="card item">
-          <div class="icon">🧾</div>
-          <h3 data-cn="修车被宰 / 乱报价" data-en="Overcharged / random pricing">修车被宰 / 乱报价</h3>
-          <p data-cn="不懂行情、怕被坑，进车行像开盲盒。"
-             data-en="No price sense—every workshop feels like a gamble.">
-            不懂行情、怕被坑，进车行像开盲盒。
-          </p>
-        </div>
-        <div class="card item">
-          <div class="icon">😶‍🌫️</div>
-          <h3 data-cn="不敢进车行" data-en="Afraid to visit workshops">不敢进车行</h3>
-          <p data-cn="术语听不懂、流程不熟，担心被“讲到怕”。"
-             data-en="Terms and process are confusing—worried you’ll be talked into things.">
-            术语听不懂、流程不熟，担心被“讲到怕”。
-          </p>
-        </div>
-        <div class="card item">
-          <div class="icon">🤝</div>
-          <h3 data-cn="想玩车却没人一起" data-en="Want car friends to roll with">想玩车却没人一起</h3>
-          <p data-cn="想改车/养车/约跑，但周围没人能聊、没人带。"
-             data-en="Want mods/meets, but no one to guide you.">
-            想改车/养车/约跑，但周围没人能聊、没人带。
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="wrap">
-      <div class="section-title">
-        <h2 data-cn="我们是谁？" data-en="Who are we?">我们是谁？</h2>
-        <p data-cn="不卖车、不割韭菜，只讲真实经验"
-           data-en="No selling, no scams—real experience only">
-          不卖车、不割韭菜，只讲真实经验
-        </p>
-      </div>
-
-      <div class="two-col">
-        <div class="card item">
-          <div class="icon">🔥</div>
-          <h3 data-cn="野火社 Auto Service Club" data-en="Wildfire Auto Service Club">野火社 Auto Service Club</h3>
-          <p
-            data-cn="一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，都能在这里找到同路人。"
-            data-en="A car community built by international students in Malaysia—first cars, daily driving, performance, and mods.">
-            一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，
-            都能在这里找到同路人。
-          </p>
-          <ul>
-            <li data-cn="懂修车的 / 玩轮胎、避震、改装的"
-                data-en="Maintenance / tyres / suspension / mods">
-              懂修车的 / 玩轮胎、避震、改装的
-            </li>
-            <li data-cn="日常代步 & 性能玩家"
-                data-en="Daily drivers & performance lovers">
-              日常代步 & 性能玩家
-            </li>
-            <li data-cn="走过弯路的人，拉你少走弯路"
-                data-en="We’ve learned the hard way—so you don’t have to.">
-              走过弯路的人，拉你少走弯路
-            </li>
-          </ul>
-        </div>
-
-        <div class="card item" id="benefits">
-          <div class="icon">✅</div>
-          <h3 data-cn="我们能给你什么？" data-en="What you’ll get">我们能给你什么？</h3>
-          <ul>
-            <li data-cn="真实修车 / 保养 / 轮胎经验分享" data-en="Real service / maintenance / tyre tips">真实修车 / 保养 / 轮胎经验分享</li>
-            <li data-cn="车行避坑 & 价格参考（少踩雷）" data-en="Workshop red flags & price references">车行避坑 & 价格参考（少踩雷）</li>
-            <li data-cn="车主交流、约跑、聚会" data-en="Chats, meets, cruises">车主交流、约跑、聚会</li>
-            <li data-cn="新手友好｜不懂车也欢迎" data-en="Beginner-friendly—no car knowledge needed">新手友好｜不懂车也欢迎</li>
-            <li data-cn="留学生自己人的“养车圈子”" data-en="A student-owned car circle">留学生自己人的“养车圈子”</li>
-          </ul>
-          <div style="margin-top:12px">
-            <span class="tag"
-                  data-cn="🏁 超省钱 · 想玩车 · 想社交"
-                  data-en="🏁 Save money · Enjoy cars · Make friends">
-              🏁 超省钱 · 想玩车 · 想社交
-            </span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="join">
-    <div class="wrap">
-      <div class="cta">
+    <footer>
+      <div class="wrap">
         <div>
-          <strong
-            data-cn="那你一定要认识我们 —— 野火社 Auto Service Club"
-            data-en="Then you should definitely meet us — Wildfire Auto Service Club">
-            那你一定要认识我们 —— 野火社 Auto Service Club
-          </strong>
-          <div style="color:var(--muted); margin-top:4px"
-               data-cn="一起把车玩明白 🔥"
-               data-en="Let’s truly understand cars 🔥">
-            一起把车玩明白 🔥
-          </div>
+          <b style="color:#fff"
+             data-cn="野火不灭，车魂不散"
+             data-en="Wildfire never dies — car spirit lives on">
+            野火不灭，车魂不散
+          </b>
         </div>
-
-        <div class="cta-row">
-          <a class="btn btn-primary"
-             href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
-             target="_blank"
-             data-cn="🚗 加入 WhatsApp 群"
-             data-en="🚗 Join WhatsApp group">
-            🚗 加入 WhatsApp 群
-          </a>
-          <span class="btn btn-ghost"
-                data-cn="📩 微信 v：Sn20xxf"
-                data-en="📩 WeChat: Sn20xxf">
-            📩 微信 v：Sn20xxf
+        <div class="small">
+          © <span id="y"></span> Wildfire Auto Service Club ·
+          <span data-cn="马来西亚留学生汽车社群" data-en="For Malaysian international students">
+            马来西亚留学生汽车社群
           </span>
         </div>
       </div>
-    </div>
-  </section>
+    </footer>
+  </main>
 
-  <footer>
-    <div class="wrap">
-      <div>
-        <b style="color:#fff"
-           data-cn="野火不灭，车魂不散"
-           data-en="Wildfire never dies — car spirit lives on">
-          野火不灭，车魂不散
-        </b>
+  <!-- 海报全屏预览 Modal -->
+  <div class="modal" id="posterModal" aria-hidden="true">
+    <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Poster Preview">
+      <div class="modal-bar">
+        <div class="modal-title">
+          🖼️ <span data-cn="海报预览" data-en="Poster Preview">海报预览</span>
+        </div>
+        <button class="modal-close" onclick="closePoster()" data-cn="关闭" data-en="Close">关闭</button>
       </div>
-      <div class="small">
-        © <span id="y"></span> Wildfire Auto Service Club ·
-        <span data-cn="马来西亚留学生汽车社群" data-en="For Malaysian international students">
-          马来西亚留学生汽车社群
-        </span>
+      <div class="modal-content">
+        <img id="posterModalImg" src="" alt="Poster Preview">
       </div>
-    </div>
-  </footer>
-</main>
-
-<!-- ✅ 海报全屏预览 Modal（新增） -->
-<div class="modal" id="posterModal" aria-hidden="true">
-  <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Poster Preview">
-    <div class="modal-bar">
-      <div class="modal-title">
-        🖼️ <span data-cn="海报预览" data-en="Poster Preview">海报预览</span>
+      <div class="modal-hint" data-cn="提示：点击空白处或按 ESC 也可以关闭"
+           data-en="Tip: Click outside or press ESC to close">
+        提示：点击空白处或按 ESC 也可以关闭
       </div>
-      <button class="modal-close" onclick="closePoster()" data-cn="关闭" data-en="Close">关闭</button>
-    </div>
-    <div class="modal-content">
-      <img id="posterModalImg" src="" alt="Poster Preview">
-    </div>
-    <div class="modal-hint" data-cn="提示：点击空白处或按 ESC 也可以关闭"
-         data-en="Tip: Click outside or press ESC to close">
-      提示：点击空白处或按 ESC 也可以关闭
     </div>
   </div>
-</div>
 
-<script>
-  document.getElementById("y").textContent = new Date().getFullYear();
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
 
-  function setLang(lang, btn){
-    document.querySelectorAll('[data-cn]').forEach(el=>{
-      el.innerHTML = lang === 'cn'
-        ? el.getAttribute('data-cn')
-        : el.getAttribute('data-en');
-    });
+    function setLang(lang, btn){
+      document.querySelectorAll('[data-cn]').forEach(el=>{
+        el.innerHTML = lang === 'cn'
+          ? el.getAttribute('data-cn')
+          : el.getAttribute('data-en');
+      });
 
-    document.querySelectorAll('.lang-switch button').forEach(b=>{
-      b.classList.remove('active');
-    });
-    if(btn) btn.classList.add('active');
-  }
-
-  // ✅ 海报全屏预览
-  function openPoster(e){
-    if(e) e.preventDefault();
-
-    const thumb = document.getElementById('posterThumb');
-    if(!thumb || thumb.style.display === 'none') return;
-
-    const modal = document.getElementById('posterModal');
-    const modalImg = document.getElementById('posterModalImg');
-
-    modalImg.src = thumb.getAttribute('src') || 'poster.png';
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-
-    // 锁定滚动
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closePoster(){
-    const modal = document.getElementById('posterModal');
-    const modalImg = document.getElementById('posterModalImg');
-
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-    modalImg.src = '';
-
-    // 恢复滚动
-    document.body.style.overflow = '';
-  }
-
-  // 点击遮罩空白处关闭（但点到弹窗内容不关闭）
-  document.getElementById('posterModal').addEventListener('click', (e)=>{
-    if(e.target.id === 'posterModal') closePoster();
-  });
-
-  // ESC 关闭
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape'){
-      const modal = document.getElementById('posterModal');
-      if(modal.classList.contains('open')) closePoster();
+      document.querySelectorAll('.lang-switch button').forEach(b=>{
+        b.classList.remove('active');
+      });
+      if(btn) btn.classList.add('active');
     }
-  });
-</script>
+
+    // 海报全屏预览
+    function openPoster(e){
+      if(e) e.preventDefault();
+
+      const thumb = document.getElementById('posterThumb');
+      if(!thumb || thumb.style.display === 'none') return;
+
+      const modal = document.getElementById('posterModal');
+      const modalImg = document.getElementById('posterModalImg');
+
+      modalImg.src = thumb.getAttribute('src') || 'poster.png';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePoster(){
+      const modal = document.getElementById('posterModal');
+      const modalImg = document.getElementById('posterModalImg');
+
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // 点击遮罩空白处关闭
+    document.getElementById('posterModal').addEventListener('click', (e)=>{
+      if(e.target.id === 'posterModal') closePoster();
+    });
+
+    // ESC 关闭
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
+        const modal = document.getElementById('posterModal');
+        if(modal.classList.contains('open')) closePoster();
+      }
+    });
+
+    /* ===== Header 滚动阴影 ===== */
+    (function(){
+      const header = document.querySelector('header');
+      if(!header) return;
+      const onScroll = () => {
+        if(window.scrollY > 6) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive:true });
+    })();
+
+    /* ===== reveal 滚动渐入 ===== */
+    (function(){
+      const targets = document.querySelectorAll(
+        '.card, .section-title, section h2, footer .wrap, .hero-card, .poster-card'
+      );
+
+      targets.forEach((el, i) => {
+        el.classList.add('reveal');
+        const k = (i % 5) + 1;
+        el.classList.add('stagger-' + k);
+      });
+
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduce) {
+        targets.forEach(el => el.classList.add('show'));
+        return;
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if(entry.isIntersecting){
+            entry.target.classList.add('show');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+      targets.forEach(el => io.observe(el));
+    })();
+
+    /* ===== Top progress（页面加载） ===== */
+    (function(){
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(reduce) return;
+
+      const prog = document.getElementById('topProgress');
+      const bar = document.getElementById('topProgressBar');
+      if(!prog || !bar) return;
+
+      let p = 0;
+      bar.style.width = '0%';
+
+      // 加载中：慢慢推进到 90%
+      const timer = setInterval(() => {
+        p = Math.min(90, p + Math.random() * 10);
+        bar.style.width = p.toFixed(0) + '%';
+      }, 180);
+
+      // 页面完全加载：冲到 100%，再淡出
+      window.addEventListener('load', () => {
+        clearInterval(timer);
+        bar.style.width = '100%';
+        setTimeout(() => prog.classList.add('done'), 220);
+        setTimeout(() => prog.style.display = 'none', 700);
+      });
+    })();
+  </script>
 </body>
 </html>
 
