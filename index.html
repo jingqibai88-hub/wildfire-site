@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -52,7 +51,13 @@
     .brand{
       display:flex; align-items:center; gap:12px;
       font-weight:800; letter-spacing:.5px;
+      animation: float 4s ease-in-out infinite;
     }
+    @keyframes float{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
+    }
+
     .badge{
       display:inline-flex; align-items:center; gap:8px;
       padding:6px 10px; border:1px solid var(--border);
@@ -69,7 +74,6 @@
     }
     .links a:hover{background:var(--panel2); color:var(--text)}
 
-    /* ====== 语言切换（来自第二份代码） ====== */
     .lang-switch{
       display:flex;
       gap:6px;
@@ -94,7 +98,6 @@
       font-weight:700;
     }
 
-    /* ====== HERO ====== */
     .hero{padding:44px 0 10px}
     .hero-grid{
       display:grid; gap:18px;
@@ -144,7 +147,6 @@
     .btn-ghost{background: rgba(255,255,255,.06); color:var(--text)}
     .btn:hover{transform: translateY(-1px)}
 
-    /* CTA 按钮火焰脉冲（来自第二份代码） */
     .btn-primary::after{
       content:"";
       position:absolute;
@@ -158,7 +160,6 @@
       to{transform:scale(1.4); opacity:.25}
     }
 
-    /* Hero 标题发光（来自第二份代码） */
     .hero h1{
       text-shadow:
         0 0 12px rgba(255,59,48,.35),
@@ -178,15 +179,6 @@
       }
     }
 
-    /* Logo 轻浮动（来自第二份代码） */
-    .brand{
-      animation: float 4s ease-in-out infinite;
-    }
-    @keyframes float{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-4px)}
-    }
-
     .stats{
       display:grid; grid-template-columns: repeat(3, 1fr);
       gap:10px; margin-top:18px;
@@ -202,7 +194,6 @@
 
     .divider{height:1px; background:rgba(255,255,255,.10); margin:14px 0}
 
-    /* ⚠️ 第一个代码原来的 .pill（虚线条）改名，避免和第二个 .pill 冲突 */
     .pill-dash{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px; border-radius:14px;
@@ -212,7 +203,6 @@
       font-size:13px;
     }
 
-    /* Hero 的三枚小标签 pill-row（来自第二份代码） */
     .pill{
       display:inline-flex;
       gap:8px;
@@ -227,11 +217,11 @@
     }
     .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 
-    /* ====== 海报：合并两版（保留占位逻辑 + 调小 + hover） ====== */
+    /* 海报：调小 + hover + 占位 */
     .poster-card{
       padding:12px;
       overflow:hidden;
-      max-width:360px;          /* 调小 */
+      max-width:360px;
       justify-self:end;
       display:flex;
       flex-direction:column;
@@ -246,6 +236,7 @@
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.03);
       overflow:hidden;
+      cursor: zoom-in;
     }
     .poster-img{
       width:100%;
@@ -264,7 +255,6 @@
       background: rgba(0,0,0,.12);
     }
 
-    /* ====== Quick 快速入口（来自第二份代码） ====== */
     .quick{padding:0 0 22px}
     .quick h2{
       margin:0 0 12px;
@@ -277,7 +267,6 @@
       margin-top:6px;
     }
 
-    /* ====== 通用 section ====== */
     section{padding:26px 0}
     .section-title{
       display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
@@ -335,6 +324,78 @@
       margin-top:22px;
     }
     .small{font-size:12px; color:rgba(245,245,247,.55)}
+
+    /* ====== ✅ 新增：海报全屏预览 Modal ====== */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background: rgba(0,0,0,.72);
+      z-index:9999;
+      backdrop-filter: blur(6px);
+    }
+    .modal.open{display:flex;}
+    .modal-inner{
+      width:min(980px, 100%);
+      max-height: 92vh;
+      position:relative;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(15,15,20,.55);
+      box-shadow: 0 22px 80px rgba(0,0,0,.6);
+      overflow:hidden;
+    }
+    .modal-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+    }
+    .modal-title{
+      font-weight:700;
+      color:rgba(245,245,247,.92);
+      font-size:14px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .modal-close{
+      border:none;
+      cursor:pointer;
+      border-radius:12px;
+      padding:8px 10px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color: rgba(245,245,247,.85);
+      font-weight:700;
+    }
+    .modal-close:hover{background: rgba(255,255,255,.12)}
+    .modal-content{
+      padding:12px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .modal-content img{
+      width:100%;
+      height:auto;
+      max-height: 78vh;
+      object-fit:contain;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+    }
+    .modal-hint{
+      font-size:12px;
+      color: rgba(245,245,247,.65);
+      padding:0 14px 12px;
+    }
   </style>
 </head>
 
@@ -363,7 +424,6 @@
 </header>
 
 <main>
-  <!-- HERO -->
   <div class="hero">
     <div class="wrap">
       <div class="hero-grid">
@@ -388,7 +448,6 @@
             <b style="color:#fff">野火社</b>给你一个留学生自己人的汽车圈子：真实经验、避坑参考、车主交流。
           </p>
 
-          <!-- 第二份代码的联系按钮（加入到第一份结构里） -->
           <div class="cta-row">
             <a class="btn btn-primary"
                href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
@@ -412,7 +471,6 @@
             </a>
           </div>
 
-          <!-- 第二份代码：Hero 三个小标签 -->
           <div class="pill-row">
             <span class="pill" data-cn="✅ 新手友好" data-en="✅ Beginner-friendly">✅ 新手友好</span>
             <span class="pill" data-cn="🧾 价格参考" data-en="🧾 Price reference">🧾 价格参考</span>
@@ -436,7 +494,6 @@
 
           <div class="divider"></div>
 
-          <!-- 第一份代码原来的 pill（改为 pill-dash，避免冲突） -->
           <span class="pill-dash"
                 data-cn="📍 活动范围：KL / Kajang / Puchong / PJ（也欢迎全马留学生）"
                 data-en="📍 Coverage: KL / Kajang / Puchong / PJ (all Malaysia students welcome)">
@@ -444,16 +501,18 @@
           </span>
         </div>
 
-        <!-- 海报：调小 + hover + 占位逻辑保留 -->
         <div class="card poster-card">
-          <a class="poster-link" href="poster.png" target="_blank" title="点击查看大图">
+          <!-- ✅ 点击打开全屏预览（不再跳新窗口） -->
+          <a class="poster-link" href="poster.png" onclick="openPoster(event)">
             <img class="poster-img"
+                 id="posterThumb"
                  src="poster.png"
                  alt="野火社海报"
                  loading="lazy"
                  decoding="async"
                  onerror="this.style.display='none';document.getElementById('ph').style.display='block';">
           </a>
+
           <div id="ph" class="placeholder" style="display:none">
             <b data-cn="这里放海报图" data-en="Poster goes here">这里放海报图</b><br/>
             <span data-cn="把海报图片放到同目录并命名为" data-en="Put your poster in the same folder and name it">
@@ -467,7 +526,6 @@
     </div>
   </div>
 
-  <!-- Quick 快速入口（来自第二份代码，插入到第一份结构中） -->
   <section class="quick">
     <div class="wrap">
       <h2 data-cn="新手快速入口（群里常用）"
@@ -509,7 +567,6 @@
     </div>
   </section>
 
-  <!-- PAIN POINTS -->
   <section id="pain">
     <div class="wrap">
       <div class="section-title">
@@ -549,7 +606,6 @@
     </div>
   </section>
 
-  <!-- ABOUT + BENEFITS -->
   <section id="about">
     <div class="wrap">
       <div class="section-title">
@@ -608,7 +664,6 @@
     </div>
   </section>
 
-  <!-- JOIN CTA -->
   <section id="join">
     <div class="wrap">
       <div class="cta">
@@ -662,6 +717,25 @@
   </footer>
 </main>
 
+<!-- ✅ 海报全屏预览 Modal（新增） -->
+<div class="modal" id="posterModal" aria-hidden="true">
+  <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Poster Preview">
+    <div class="modal-bar">
+      <div class="modal-title">
+        🖼️ <span data-cn="海报预览" data-en="Poster Preview">海报预览</span>
+      </div>
+      <button class="modal-close" onclick="closePoster()" data-cn="关闭" data-en="Close">关闭</button>
+    </div>
+    <div class="modal-content">
+      <img id="posterModalImg" src="" alt="Poster Preview">
+    </div>
+    <div class="modal-hint" data-cn="提示：点击空白处或按 ESC 也可以关闭"
+         data-en="Tip: Click outside or press ESC to close">
+      提示：点击空白处或按 ESC 也可以关闭
+    </div>
+  </div>
+</div>
+
 <script>
   document.getElementById("y").textContent = new Date().getFullYear();
 
@@ -677,7 +751,50 @@
     });
     if(btn) btn.classList.add('active');
   }
-</script>
 
+  // ✅ 海报全屏预览
+  function openPoster(e){
+    if(e) e.preventDefault();
+
+    const thumb = document.getElementById('posterThumb');
+    if(!thumb || thumb.style.display === 'none') return;
+
+    const modal = document.getElementById('posterModal');
+    const modalImg = document.getElementById('posterModalImg');
+
+    modalImg.src = thumb.getAttribute('src') || 'poster.png';
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+
+    // 锁定滚动
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePoster(){
+    const modal = document.getElementById('posterModal');
+    const modalImg = document.getElementById('posterModalImg');
+
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    modalImg.src = '';
+
+    // 恢复滚动
+    document.body.style.overflow = '';
+  }
+
+  // 点击遮罩空白处关闭（但点到弹窗内容不关闭）
+  document.getElementById('posterModal').addEventListener('click', (e)=>{
+    if(e.target.id === 'posterModal') closePoster();
+  });
+
+  // ESC 关闭
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      const modal = document.getElementById('posterModal');
+      if(modal.classList.contains('open')) closePoster();
+    }
+  });
+</script>
 </body>
 </html>
+
