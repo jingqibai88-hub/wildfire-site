@@ -36,10 +36,9 @@
     a{color:inherit}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
 
-    /* 更像官网：平滑锚点滚动 */
     html{ scroll-behavior:smooth; }
 
-    /* ===== 顶部加载进度条（Apple 风：细、克制） ===== */
+    /* ===== 顶部加载进度条（细、克制） ===== */
     .top-progress{
       position:fixed;
       top:0; left:0; right:0;
@@ -75,6 +74,15 @@
     header.scrolled{
       box-shadow: 0 12px 40px rgba(0,0,0,.45);
       background: rgba(11,11,15,.70);
+      border-bottom-color: rgba(255,255,255,.16);
+    }
+    header.scrolled::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-1px;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      pointer-events:none;
     }
 
     .nav{
@@ -123,6 +131,14 @@
     }
     .links a:hover::after{ transform: scaleX(1); }
 
+    .links a.active{
+      color: var(--text);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .links a.active::after{ transform: scaleX(1); }
+
     .lang-switch{
       display:flex;
       gap:6px;
@@ -148,7 +164,6 @@
     }
 
     .hero{padding:44px 0 10px; position:relative;}
-    /* ===== Hero 极淡动态光晕（Apple 风：柔和、慢速） ===== */
     .hero::before{
       content:"";
       position:absolute;
@@ -185,9 +200,17 @@
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
     }
-    .hero-card{padding:26px}
+    .card:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.16);
+      box-shadow: 0 22px 70px rgba(0,0,0,.50);
+    }
 
+    .hero-card{padding:26px}
     .kicker{
       display:inline-flex; align-items:center; gap:10px;
       font-size:13px; color:var(--muted);
@@ -201,58 +224,82 @@
     .sub{color:var(--muted); font-size:16px; margin:0 0 18px}
 
     .cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+
+    /* ===== ✅ 按钮触碰/悬停高亮（Apple 风、克制） ===== */
     .btn{
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
       padding:12px 14px; border-radius:12px; border:1px solid var(--border);
       text-decoration:none; font-weight:700;
       white-space:nowrap;
-      transition: transform .15s ease;
+
+      position:relative;
+      isolation:isolate;         /* 让高亮层更干净 */
+      transform: translateZ(0);
+      transition: transform .14s ease, background .14s ease, box-shadow .14s ease, border-color .14s ease;
     }
+    .btn > *{position:relative; z-index:2}
+
+    /* 高亮光晕层（hover/focus/touch） */
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:inherit;
+      background:
+        radial-gradient(120px 60px at 20% 10%, rgba(255,255,255,.22), transparent 65%),
+        radial-gradient(140px 80px at 80% 50%, rgba(255,159,10,.18), transparent 70%),
+        radial-gradient(140px 80px at 30% 120%, rgba(255,59,48,.16), transparent 70%);
+      opacity:0;
+      filter: blur(2px);
+      transition: opacity .16s ease;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* 边框发光（更官方） */
+    .btn::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      border:1px solid rgba(255,255,255,.10);
+      opacity:0;
+      transition: opacity .16s ease;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* ✅ 电脑 hover / 键盘 focus / 手机触摸 class */
+    .btn:hover,
+    .btn:focus-visible,
+    .btn.is-active{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 14px 42px rgba(0,0,0,.38);
+    }
+    .btn:hover::before,
+    .btn:focus-visible::before,
+    .btn.is-active::before{ opacity:1; }
+    .btn:hover::after,
+    .btn:focus-visible::after,
+    .btn.is-active::after{ opacity:1; }
+
+    /* ✅ 按下时（touch active）更像 iOS 的按压反馈 */
+    .btn:active{
+      transform: translateY(0) scale(.985);
+      box-shadow: 0 10px 28px rgba(0,0,0,.32);
+    }
+
     .btn-primary{
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       border: none;
       color:#0b0b0f;
-      box-shadow: 0 10px 35px rgba(255,59,48,.25);
-      position:relative;
-      overflow:hidden;
+      box-shadow: 0 10px 30px rgba(255,59,48,.18);
     }
+    .btn-primary:hover{ box-shadow: 0 14px 42px rgba(255,59,48,.22); }
+
     .btn-ghost{background: rgba(255,255,255,.06); color:var(--text)}
-    .btn:hover{transform: translateY(-1px)}
 
-    /* 亮面扫光（更“官网”） */
-    .btn-primary::before{
-      content:"";
-      position:absolute;
-      top:-40%;
-      left:-120%;
-      width:70%;
-      height:180%;
-      transform: rotate(18deg);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
-      opacity:0;
-      transition: left .55s ease, opacity .25s ease;
-      pointer-events:none;
-    }
-    .btn-primary:hover::before{
-      left:140%;
-      opacity:1;
-    }
-
-    /* CTA 火焰脉冲（保留） */
-    .btn-primary::after{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background: radial-gradient(circle, rgba(255,255,255,.45), transparent 60%);
-      animation:pulse 2.8s infinite;
-      pointer-events:none;
-    }
-    @keyframes pulse{
-      from{transform:scale(.7); opacity:0}
-      to{transform:scale(1.4); opacity:.25}
-    }
-
-    /* Hero 标题发光（保留） */
     .hero h1{
       text-shadow:
         0 0 12px rgba(255,59,48,.35),
@@ -310,7 +357,6 @@
     }
     .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 
-    /* 海报：调小 + hover + 占位 */
     .poster-card{
       padding:12px;
       overflow:hidden;
@@ -353,7 +399,31 @@
       margin:0 0 12px;
       font-size:18px;
       color:rgba(245,245,247,.92);
+      position:relative;
+      padding-bottom:10px;
     }
+    .quick h2::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:1px;
+      border-radius:999px;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(245,245,247,.18),
+        rgba(255,159,10,.22),
+        transparent
+      );
+      transform: scaleX(.22);
+      transform-origin:center;
+      opacity:0;
+      transition: transform .85s ease, opacity .85s ease;
+    }
+    .quick h2.show::after{
+      transform: scaleX(1);
+      opacity:1;
+    }
+
     .mini{
       color:rgba(245,245,247,.72);
       font-size:13px;
@@ -361,12 +431,37 @@
     }
 
     section{padding:26px 0}
+
     .section-title{
       display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
       margin-bottom:14px;
+      position:relative;
+      padding-bottom:10px;
     }
     .section-title h2{margin:0; font-size:24px}
     .section-title p{margin:0; color:var(--muted); font-size:14px}
+
+    .section-title::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:0;
+      height:1px;
+      border-radius:999px;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(245,245,247,.16),
+        rgba(255,159,10,.20),
+        transparent
+      );
+      transform: scaleX(.22);
+      transform-origin:center;
+      opacity:0;
+      transition: transform .9s ease, opacity .9s ease;
+    }
+    .section-title.show::after{
+      transform: scaleX(1);
+      opacity:1;
+    }
 
     .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
     @media (max-width: 900px){.grid-3{grid-template-columns:1fr}}
@@ -506,7 +601,7 @@
       padding:0 14px 12px;
     }
 
-    /* 官方 reveal 动画 */
+    /* reveal 滚动渐入 */
     .reveal{
       opacity:0;
       transform: translateY(14px);
@@ -524,14 +619,28 @@
     .reveal.stagger-4{ transition-delay:.16s; }
     .reveal.stagger-5{ transition-delay:.20s; }
 
-    /* 官方标准：可访问焦点圈 */
+    .hero-card .kicker,
+    .hero-card h1,
+    .hero-card .sub,
+    .hero-card .cta-row{
+      opacity:0;
+      transform: translateY(10px);
+      animation: heroIn .7s ease forwards;
+    }
+    .hero-card .kicker{ animation-delay:.02s; }
+    .hero-card h1{ animation-delay:.08s; }
+    .hero-card .sub{ animation-delay:.14s; }
+    .hero-card .cta-row{ animation-delay:.20s; }
+    @keyframes heroIn{
+      to{ opacity:1; transform: translateY(0); }
+    }
+
     :focus-visible{
       outline: 2px solid rgba(255,159,10,.75);
       outline-offset: 2px;
       border-radius: 10px;
     }
 
-    /* 系统减少动画：自动降级 */
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
       *{ animation:none !important; transition:none !important; }
@@ -542,7 +651,6 @@
 </head>
 
 <body>
-  <!-- 顶部加载进度条 -->
   <div class="top-progress" id="topProgress" aria-hidden="true">
     <div class="bar" id="topProgressBar"></div>
   </div>
@@ -605,6 +713,7 @@
               </a>
 
               <span class="btn btn-ghost"
+                    role="button" tabindex="0"
                     data-cn="📩 微信 v：Sn20xxf"
                     data-en="📩 WeChat: Sn20xxf">
                 📩 微信 v：Sn20xxf
@@ -835,6 +944,7 @@
               🚗 加入 WhatsApp 群
             </a>
             <span class="btn btn-ghost"
+                  role="button" tabindex="0"
                   data-cn="📩 微信 v：Sn20xxf"
                   data-en="📩 WeChat: Sn20xxf">
               📩 微信 v：Sn20xxf
@@ -863,7 +973,6 @@
     </footer>
   </main>
 
-  <!-- 海报全屏预览 Modal -->
   <div class="modal" id="posterModal" aria-hidden="true">
     <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Poster Preview">
       <div class="modal-bar">
@@ -898,7 +1007,6 @@
       if(btn) btn.classList.add('active');
     }
 
-    // 海报全屏预览
     function openPoster(e){
       if(e) e.preventDefault();
 
@@ -924,12 +1032,10 @@
       document.body.style.overflow = '';
     }
 
-    // 点击遮罩空白处关闭
     document.getElementById('posterModal').addEventListener('click', (e)=>{
       if(e.target.id === 'posterModal') closePoster();
     });
 
-    // ESC 关闭
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape'){
         const modal = document.getElementById('posterModal');
@@ -937,7 +1043,6 @@
       }
     });
 
-    /* ===== Header 滚动阴影 ===== */
     (function(){
       const header = document.querySelector('header');
       if(!header) return;
@@ -949,7 +1054,6 @@
       window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
-    /* ===== reveal 滚动渐入 ===== */
     (function(){
       const targets = document.querySelectorAll(
         '.card, .section-title, section h2, footer .wrap, .hero-card, .poster-card'
@@ -979,7 +1083,6 @@
       targets.forEach(el => io.observe(el));
     })();
 
-    /* ===== Top progress（页面加载） ===== */
     (function(){
       const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(reduce) return;
@@ -991,18 +1094,103 @@
       let p = 0;
       bar.style.width = '0%';
 
-      // 加载中：慢慢推进到 90%
       const timer = setInterval(() => {
         p = Math.min(90, p + Math.random() * 10);
         bar.style.width = p.toFixed(0) + '%';
       }, 180);
 
-      // 页面完全加载：冲到 100%，再淡出
       window.addEventListener('load', () => {
         clearInterval(timer);
         bar.style.width = '100%';
         setTimeout(() => prog.classList.add('done'), 220);
         setTimeout(() => prog.style.display = 'none', 700);
+      });
+    })();
+
+    (function(){
+      const header = document.querySelector('header');
+      const navLinks = Array.from(document.querySelectorAll('.links a[href^="#"]'));
+      if(!navLinks.length) return;
+
+      const sections = navLinks
+        .map(a => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+      if(!sections.length) return;
+
+      function setActive(id){
+        navLinks.forEach(a => {
+          const href = a.getAttribute('href');
+          a.classList.toggle('active', href === '#' + id);
+        });
+      }
+
+      function getOffset(){
+        const h = header ? header.getBoundingClientRect().height : 0;
+        return Math.max(64, Math.min(120, h + 12));
+      }
+
+      let ticking = false;
+
+      function update(){
+        ticking = false;
+        const offset = getOffset();
+
+        let current = sections[0];
+        for(const sec of sections){
+          const r = sec.getBoundingClientRect();
+          const top = r.top - offset;
+          const bottom = r.bottom - offset;
+
+          if(top <= 0 && bottom > 0){
+            current = sec;
+            break;
+          }
+          if(Math.abs(top) < Math.abs(current.getBoundingClientRect().top - offset)){
+            current = sec;
+          }
+        }
+
+        if(current && current.id) setActive(current.id);
+      }
+
+      function onScroll(){
+        if(ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive:true });
+      window.addEventListener('resize', onScroll, { passive:true });
+
+      navLinks.forEach(a=>{
+        a.addEventListener('click', ()=>{
+          const id = (a.getAttribute('href') || '').slice(1);
+          if(id) setActive(id);
+        });
+      });
+
+      const hash = (location.hash || '').slice(1);
+      if(hash) setActive(hash);
+
+      update();
+    })();
+
+    /* ✅ 关键：手机“触碰也高亮”——给 .btn 加一个短暂 is-active */
+    (function(){
+      const btns = document.querySelectorAll('.btn');
+      btns.forEach(el=>{
+        el.addEventListener('pointerdown', ()=>{
+          el.classList.add('is-active');
+          window.setTimeout(()=> el.classList.remove('is-active'), 260);
+        }, {passive:true});
+
+        /* 让 span.btn-ghost 也能键盘触发一点反馈 */
+        el.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            el.classList.add('is-active');
+            window.setTimeout(()=> el.classList.remove('is-active'), 260);
+          }
+        });
       });
     })();
   </script>
