@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>野火社 Auto Service Club｜马来西亚留学生汽车俱乐部</title>
+  <meta name="description" content="野火社 Auto Service Club｜马来西亚留学生汽车俱乐部：真实修车/保养经验分享、车行避坑与价格参考、车主交流聚会，新手友好。" />
+
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.12);
+      --text:#f5f5f7;
+      --muted: rgba(245,245,247,.7);
+      --accent:#ff3b30;
+      --accent2:#ff9f0a;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius:18px;
+      --max:1120px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,"PingFang SC","Microsoft YaHei",Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(255,59,48,.28), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(255,159,10,.22), transparent 55%),
+        radial-gradient(1000px 700px at 50% 110%, rgba(255,59,48,.20), transparent 60%),
+        var(--bg);
+      line-height:1.6;
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(10px);
+      background:rgba(11,11,15,.55);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+    .brand{display:flex;gap:12px;font-weight:800}
+    .badge{
+      padding:6px 10px;border:1px solid var(--border);
+      background:var(--panel);border-radius:999px;
+      font-size:12px;color:var(--muted);
+    }
+    .links{display:flex;gap:14px;align-items:center}
+    .links a{padding:6px 10px;border-radius:999px;font-size:14px;color:var(--muted)}
+    .links a:hover{background:var(--panel2);color:var(--text)}
+
+    .hero{padding:44px 0 18px}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:start}
+    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero-card{padding:26px}
+    h1{font-size:44px;margin:14px 0}
+    @media(max-width:520px){h1{font-size:34px}}
+    .sub{color:var(--muted)}
+
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .btn{
+      padding:12px 14px;border-radius:12px;
+      border:1px solid var(--border);
+      font-weight:700;text-decoration:none;
+      display:inline-flex;align-items:center;gap:8px;
+      white-space:nowrap;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      border:none;color:#0b0b0f;
+    }
+    .btn-ghost{background:rgba(255,255,255,.06)}
+
+    section{padding:28px 0}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    @media(max-width:900px){.grid-3{grid-template-columns:1fr}}
+
+    .item{padding:16px}
+    .icon{
+      width:36px;height:36px;border-radius:12px;
+      background:rgba(255,59,48,.12);
+      border:1px solid rgba(255,59,48,.25);
+      display:grid;place-items:center;
+      margin-bottom:10px;
+    }
+
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:900px){.two-col{grid-template-columns:1fr}}
+
+    .cta{
+      padding:22px;border-radius:var(--radius);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    }
+
+    footer{
+      border-top:1px solid rgba(255,255,255,.1);
+      padding:26px 0 40px;color:var(--muted);
+    }
+    .small{font-size:12px;color:rgba(245,245,247,.55)}
+
+    .lang-switch{
+      display:flex;
+      gap:6px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      padding:4px;
+    }
+    .lang-switch button{
+      border:none;
+      background:transparent;
+      color:rgba(245,245,247,.7);
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+    .lang-switch button.active{
+      background:linear-gradient(135deg,#ff3b30,#ff9f0a);
+      color:#0b0b0f;
+      font-weight:700;
+    }
+
+    .hero h1{
+      text-shadow:
+        0 0 12px rgba(255,59,48,.35),
+        0 0 30px rgba(255,159,10,.25);
+      animation: glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes glow{
+      from{
+        text-shadow:
+          0 0 8px rgba(255,59,48,.25),
+          0 0 20px rgba(255,159,10,.15);
+      }
+      to{
+        text-shadow:
+          0 0 16px rgba(255,59,48,.45),
+          0 0 40px rgba(255,159,10,.35);
+      }
+    }
+
+    .btn-primary{
+      position:relative;
+      overflow:hidden;
+    }
+    .btn-primary::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle, rgba(255,255,255,.45), transparent 60%);
+      animation:pulse 2.8s infinite;
+      pointer-events:none;
+    }
+    @keyframes pulse{
+      from{transform:scale(.7); opacity:0}
+      to{transform:scale(1.4); opacity:.25}
+    }
+
+    .brand{
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
+    }
+
+    /* ✅ 海报：调小 + 更协调（关键改动） */
+    .poster-card{
+      padding:12px;
+      overflow:hidden;
+      max-width:360px;          /* 桌面端海报更小 */
+      justify-self:end;         /* 靠右更像“宣传角” */
+    }
+    @media(max-width:900px){
+      .poster-card{max-width:100%; justify-self:stretch;}
+    }
+    .poster-link{
+      display:block;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+    }
+    .poster-img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:14px;
+      transition: transform .25s ease;
+      max-height:520px;         /* 进一步限制高度，避免太占空间 */
+      object-fit:cover;
+    }
+    .poster-link:hover .poster-img{transform: scale(1.02);}
+
+    /* ✅ 新增：hero 下方“快速入口”内容，填充不空 */
+    .quick{
+      padding:0 0 22px;
+    }
+    .quick h2{
+      margin:0 0 12px;
+      font-size:18px;
+      color:rgba(245,245,247,.92);
+    }
+    .quick .grid-3 .item{
+      min-height:140px;
+    }
+    .mini{
+      color:rgba(245,245,247,.72);
+      font-size:13px;
+      margin-top:6px;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:rgba(245,245,247,.78);
+      font-size:12px;
+    }
+    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      🔥 野火社 <span class="badge">Auto Service Club · Malaysia</span>
+    </div>
+
+    <nav class="links">
+      <a href="#join" data-cn="加入我们" data-en="Join">加入我们</a>
+
+      <div class="lang-switch">
+        <button class="active" onclick="setLang('cn', this)">中文</button>
+        <button onclick="setLang('en', this)">EN</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+
+    <div class="card hero-card">
+      <h1
+        data-cn="一起进群，<br>一起把车玩明白"
+        data-en="Join the group,<br>and truly understand your car">
+        一起进群，<br>一起把车玩明白
+      </h1>
+
+      <p class="sub"
+         data-cn="修车被宰？不敢进车行？想玩车却没人交流？<br><b>野火社</b> 给你一个留学生自己的汽车圈子。"
+         data-en="Afraid of being overcharged? Unsure about workshops? Want to enjoy cars but have no one to talk to?<br><b>Wildfire</b> gives you a student-owned car community.">
+        修车被宰？不敢进车行？想玩车却没人交流？<br>
+        <b>野火社</b> 给你一个留学生自己的汽车圈子。
+      </p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary"
+           href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
+           target="_blank"
+           data-cn="🔥 立即加入 / WhatsApp 进群"
+           data-en="🔥 Join now / WhatsApp">
+          🔥 立即加入 / WhatsApp 进群
+        </a>
+
+        <span class="btn btn-ghost"
+              data-cn="📩 微信 v：Sn20xxf"
+              data-en="📩 WeChat: Sn20xxf">
+          📩 微信 v：Sn20xxf
+        </span>
+      </div>
+
+      <div class="pill-row">
+        <span class="pill" data-cn="✅ 新手友好" data-en="✅ Beginner-friendly">✅ 新手友好</span>
+        <span class="pill" data-cn="🧾 价格参考" data-en="🧾 Price reference">🧾 价格参考</span>
+        <span class="pill" data-cn="🤝 约跑/聚会" data-en="🤝 Meets & cruises">🤝 约跑/聚会</span>
+      </div>
+    </div>
+
+    <div class="card poster-card">
+      <a class="poster-link" href="poster.png" target="_blank">
+        <img class="poster-img"
+             src="poster.png"
+             alt="野火社 Auto Service Club 宣传海报"
+             loading="lazy"
+             decoding="async">
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ✅ 新增：快速入口（填充版块，不空） -->
+<section class="quick">
+  <div class="wrap">
+    <h2
+      data-cn="新手快速入口（群里常用）"
+      data-en="Quick shortcuts (most used in group)">
+      新手快速入口（群里常用）
+    </h2>
+
+    <div class="grid-3">
+      <div class="card item">
+        <div class="icon">📌</div>
+        <h3 data-cn="新手必读" data-en="Beginner checklist">新手必读</h3>
+        <p class="mini"
+           data-cn="第一次买车/刚落地？我们整理了：验车要点、常见坑、必做保养。"
+           data-en="First car in Malaysia? We compiled inspection tips, common traps, and essential maintenance.">
+          第一次买车/刚落地？我们整理了：验车要点、常见坑、必做保养。
+        </p>
+      </div>
+
+      <div class="card item">
+        <div class="icon">💰</div>
+        <h3 data-cn="保养/维修价格参考" data-en="Service price reference">保养/维修价格参考</h3>
+        <p class="mini"
+           data-cn="机油、刹车、轮胎、避震…常见项目大概多少钱，心里有数不怕宰。"
+           data-en="Oil, brakes, tyres, suspension… typical price ranges so you won’t get overcharged.">
+          机油、刹车、轮胎、避震…常见项目大概多少钱，心里有数不怕宰。
+        </p>
+      </div>
+
+      <div class="card item">
+        <div class="icon">🗓️</div>
+        <h3 data-cn="近期活动/约跑" data-en="Upcoming meets">近期活动/约跑</h3>
+        <p class="mini"
+           data-cn="KL / Kajang / Bangi / PJ 不定期小聚：咖啡+车聊+拍照。"
+           data-en="Casual meets in KL / Kajang / Bangi / PJ: coffee, car talk, and photos.">
+          KL / Kajang / Bangi / PJ 不定期小聚：咖啡+车聊+拍照。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 data-cn="在马来西亚留学，你是不是也遇到过这些问题？"
+        data-en="Studying in Malaysia? Have you faced these problems too?">
+      在马来西亚留学，你是不是也遇到过这些问题？
+    </h2>
+
+    <div class="grid-3">
+      <div class="card item">
+        <div class="icon">🧾</div>
+        <h3 data-cn="修车被宰 / 乱报价" data-en="Overcharged / Random pricing">修车被宰 / 乱报价</h3>
+        <p data-cn="不懂行情，进车行像开盲盒。" data-en="No price sense—every workshop feels like a gamble.">不懂行情，进车行像开盲盒。</p>
+      </div>
+      <div class="card item">
+        <div class="icon">😶‍🌫️</div>
+        <h3 data-cn="不敢进车行" data-en="Afraid to visit workshops">不敢进车行</h3>
+        <p data-cn="术语听不懂，担心被“讲到怕”。" data-en="Terms are confusing—worried you'll be talked into things.">术语听不懂，担心被“讲到怕”。</p>
+      </div>
+      <div class="card item">
+        <div class="icon">🤝</div>
+        <h3 data-cn="想玩车却没人一起" data-en="Want car friends to roll with">想玩车却没人一起</h3>
+        <p data-cn="想改车 / 约跑，却没人带。" data-en="Want mods / meets, but no one to guide you.">想改车 / 约跑，却没人带。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two-col">
+    <div class="card item">
+      <div class="icon">🔥</div>
+      <h3 data-cn="我们是谁？" data-en="Who are we?">我们是谁？</h3>
+      <p
+        data-cn="野火社 Auto Service Club 是一个由马来西亚留学生组成的汽车社群，从新手第一辆车到日常代步、性能玩家、改装交流。"
+        data-en="Wildfire Auto Service Club is a community built by international students in Malaysia—covering first cars, daily driving, performance, and mods.">
+        野火社 Auto Service Club 是一个由马来西亚留学生组成的汽车社群，
+        从新手第一辆车到日常代步、性能玩家、改装交流。
+      </p>
+      <ul>
+        <li data-cn="懂修车 / 改装 / 轮胎避震" data-en="Maintenance / Mods / Tyres & suspension">懂修车 / 改装 / 轮胎避震</li>
+        <li data-cn="日常代步 & 性能玩家" data-en="Daily drivers & performance lovers">日常代步 & 性能玩家</li>
+        <li data-cn="走过弯路的人，拉你少走弯路" data-en="We’ve learned the hard way—so you don’t have to.">走过弯路的人，拉你少走弯路</li>
+      </ul>
+      <p class="small"
+         data-cn="不卖车 · 不割韭菜 · 只讲真实经验"
+         data-en="No selling · No scams · Real experience only">
+        不卖车 · 不割韭菜 · 只讲真实经验
+      </p>
+    </div>
+
+    <div class="card item">
+      <div class="icon">✅</div>
+      <h3 data-cn="我们能给你什么？" data-en="What you’ll get">我们能给你什么？</h3>
+      <ul>
+        <li data-cn="真实修车 / 保养 / 轮胎经验" data-en="Real maintenance / service / tyre tips">真实修车 / 保养 / 轮胎经验</li>
+        <li data-cn="车行避坑 & 价格参考" data-en="Workshop red flags & price references">车行避坑 & 价格参考</li>
+        <li data-cn="车主交流、约跑、聚会" data-en="Chats, meets, cruises">车主交流、约跑、聚会</li>
+        <li data-cn="新手友好，不懂车也欢迎" data-en="Beginner-friendly—no car knowledge needed">新手友好，不懂车也欢迎</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="cta">
+      <div>
+        <strong
+          data-cn="那你一定要认识我们 —— 野火社 Auto Service Club"
+          data-en="Then you should definitely meet us — Wildfire Auto Service Club">
+          那你一定要认识我们 —— 野火社 Auto Service Club
+        </strong>
+        <div class="small"
+             data-cn="一起把车玩明白 🔥"
+             data-en="Let’s truly understand cars 🔥">
+          一起把车玩明白 🔥
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary"
+           href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
+           target="_blank"
+           data-cn="🚗 加入 WhatsApp 群"
+           data-en="🚗 Join WhatsApp group">
+          🚗 加入 WhatsApp 群
+        </a>
+        <span class="btn btn-ghost"
+              data-cn="📩 微信 v：Sn20xxf"
+              data-en="📩 WeChat: Sn20xxf">
+          📩 微信 v：Sn20xxf
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b style="color:#fff"
+       data-cn="野火不灭，车魂不散"
+       data-en="Wildfire never dies — car spirit lives on">
+      野火不灭，车魂不散
+    </b>
+    <div class="small">
+      © <span id="y"></span> Wildfire Auto Service Club<br>
+      <span data-cn="微信 Sn20xxf ｜ WhatsApp 群" data-en="WeChat Sn20xxf ｜ WhatsApp Group">
+        微信 Sn20xxf ｜ WhatsApp 群
+      </span>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  function setLang(lang, btn){
+    document.querySelectorAll('[data-cn]').forEach(el=>{
+      el.innerHTML = lang === 'cn'
+        ? el.getAttribute('data-cn')
+        : el.getAttribute('data-en');
+    });
+
+    document.querySelectorAll('.lang-switch button').forEach(b=>{
+      b.classList.remove('active');
+    });
+    if(btn) btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
