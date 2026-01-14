@@ -16,12 +16,13 @@
       --muted: rgba(245,245,247,.7);
       --accent:#ff3b30;
       --accent2:#ff9f0a;
-      --ok:#34c759;
       --shadow: 0 18px 60px rgba(0,0,0,.45);
       --radius: 18px;
       --max: 1120px;
     }
+
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC","Hiragino Sans GB","Microsoft YaHei", Arial;
@@ -36,16 +37,12 @@
     a{color:inherit}
     .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
 
-    html{ scroll-behavior:smooth; }
-
-    /* ===== 顶部加载进度条（细、克制） ===== */
+    /* 顶部加载进度条 */
     .top-progress{
-      position:fixed;
-      top:0; left:0; right:0;
-      height:2px;
-      z-index:10000;
+      position:fixed; top:0; left:0; right:0;
+      height:2px; z-index:10000;
       pointer-events:none;
-      background: transparent;
+      background:transparent;
     }
     .top-progress .bar{
       height:100%;
@@ -60,11 +57,9 @@
       transition: width .18s ease;
       opacity:.92;
     }
-    .top-progress.done{
-      opacity:0;
-      transition: opacity .35s ease;
-    }
+    .top-progress.done{opacity:0; transition: opacity .35s ease}
 
+    /* Header / Nav */
     header{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(10px);
@@ -84,7 +79,6 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
       pointer-events:none;
     }
-
     .nav{
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 0;
@@ -99,7 +93,6 @@
       0%,100%{transform:translateY(0)}
       50%{transform:translateY(-4px)}
     }
-
     .badge{
       display:inline-flex; align-items:center; gap:8px;
       padding:6px 10px; border:1px solid var(--border);
@@ -108,7 +101,6 @@
       font-size:12px;
       white-space:nowrap;
     }
-
     .links{display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:flex-end}
     .links a{
       text-decoration:none; font-size:14px; color:var(--muted);
@@ -119,25 +111,21 @@
     .links a::after{
       content:"";
       position:absolute;
-      left:10px;
-      right:10px;
-      bottom:4px;
-      height:2px;
-      border-radius:999px;
+      left:10px; right:10px; bottom:4px;
+      height:2px; border-radius:999px;
       background: linear-gradient(90deg, transparent, rgba(255,159,10,.55), transparent);
       transform: scaleX(0);
       transform-origin:center;
       transition: transform .25s ease;
     }
-    .links a:hover::after{ transform: scaleX(1); }
-
+    .links a:hover::after{transform: scaleX(1)}
     .links a.active{
       color: var(--text);
       background: rgba(255,255,255,.08);
       border: 1px solid rgba(255,255,255,.12);
       box-shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    .links a.active::after{ transform: scaleX(1); }
+    .links a.active::after{transform: scaleX(1)}
 
     .lang-switch{
       display:flex;
@@ -163,7 +151,24 @@
       font-weight:700;
     }
 
-    .hero{padding:44px 0 10px; position:relative;}
+    /* Cards */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .card:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.16);
+      box-shadow: 0 22px 70px rgba(0,0,0,.50);
+    }
+
+    /* Hero */
+    .hero{padding:44px 0 10px; position:relative}
     .hero::before{
       content:"";
       position:absolute;
@@ -184,33 +189,21 @@
       50%  { transform: translate3d(10px, -8px, 0) scale(1.03); opacity:.58; }
       100% { transform: translate3d(-4px, 10px, 0) scale(1.02); opacity:.52; }
     }
-    .hero .wrap{ position:relative; z-index:1; }
+    .hero .wrap{position:relative; z-index:1}
 
     .hero-grid{
       display:grid; gap:18px;
       grid-template-columns: 1.2fr .8fr;
-      align-items:start;
+      align-items:stretch; /* ✅ 左右同高 */
     }
-    @media (max-width: 920px){
-      .hero-grid{grid-template-columns:1fr}
-    }
+    @media (max-width: 920px){ .hero-grid{grid-template-columns:1fr} }
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow: var(--shadow);
-      position:relative;
-      overflow:hidden;
-      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    .hero-card{
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      height:100%;
     }
-    .card:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,.16);
-      box-shadow: 0 22px 70px rgba(0,0,0,.50);
-    }
-
-    .hero-card{padding:26px}
     .kicker{
       display:inline-flex; align-items:center; gap:10px;
       font-size:13px; color:var(--muted);
@@ -222,83 +215,6 @@
     h1{margin:14px 0 10px; font-size:44px; line-height:1.1}
     @media (max-width: 520px){h1{font-size:34px}}
     .sub{color:var(--muted); font-size:16px; margin:0 0 18px}
-
-    .cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
-
-    /* ===== ✅ 按钮触碰/悬停高亮（Apple 风、克制） ===== */
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      padding:12px 14px; border-radius:12px; border:1px solid var(--border);
-      text-decoration:none; font-weight:700;
-      white-space:nowrap;
-
-      position:relative;
-      isolation:isolate;         /* 让高亮层更干净 */
-      transform: translateZ(0);
-      transition: transform .14s ease, background .14s ease, box-shadow .14s ease, border-color .14s ease;
-    }
-    .btn > *{position:relative; z-index:2}
-
-    /* 高亮光晕层（hover/focus/touch） */
-    .btn::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius:inherit;
-      background:
-        radial-gradient(120px 60px at 20% 10%, rgba(255,255,255,.22), transparent 65%),
-        radial-gradient(140px 80px at 80% 50%, rgba(255,159,10,.18), transparent 70%),
-        radial-gradient(140px 80px at 30% 120%, rgba(255,59,48,.16), transparent 70%);
-      opacity:0;
-      filter: blur(2px);
-      transition: opacity .16s ease;
-      pointer-events:none;
-      z-index:1;
-    }
-
-    /* 边框发光（更官方） */
-    .btn::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      border:1px solid rgba(255,255,255,.10);
-      opacity:0;
-      transition: opacity .16s ease;
-      pointer-events:none;
-      z-index:1;
-    }
-
-    /* ✅ 电脑 hover / 键盘 focus / 手机触摸 class */
-    .btn:hover,
-    .btn:focus-visible,
-    .btn.is-active{
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,.18);
-      box-shadow: 0 14px 42px rgba(0,0,0,.38);
-    }
-    .btn:hover::before,
-    .btn:focus-visible::before,
-    .btn.is-active::before{ opacity:1; }
-    .btn:hover::after,
-    .btn:focus-visible::after,
-    .btn.is-active::after{ opacity:1; }
-
-    /* ✅ 按下时（touch active）更像 iOS 的按压反馈 */
-    .btn:active{
-      transform: translateY(0) scale(.985);
-      box-shadow: 0 10px 28px rgba(0,0,0,.32);
-    }
-
-    .btn-primary{
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none;
-      color:#0b0b0f;
-      box-shadow: 0 10px 30px rgba(255,59,48,.18);
-    }
-    .btn-primary:hover{ box-shadow: 0 14px 42px rgba(255,59,48,.22); }
-
-    .btn-ghost{background: rgba(255,255,255,.06); color:var(--text)}
 
     .hero h1{
       text-shadow:
@@ -319,6 +235,81 @@
       }
     }
 
+    .cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+
+    /* Buttons */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 14px; border-radius:12px; border:1px solid var(--border);
+      text-decoration:none; font-weight:700; white-space:nowrap;
+      position:relative;
+      isolation:isolate;
+      transform: translateZ(0);
+      transition: transform .14s ease, background .14s ease, box-shadow .14s ease, border-color .14s ease;
+    }
+    .btn > *{position:relative; z-index:2}
+    .btn::before{
+      content:"";
+      position:absolute; inset:-2px;
+      border-radius:inherit;
+      background:
+        radial-gradient(120px 60px at 20% 10%, rgba(255,255,255,.22), transparent 65%),
+        radial-gradient(140px 80px at 80% 50%, rgba(255,159,10,.18), transparent 70%),
+        radial-gradient(140px 80px at 30% 120%, rgba(255,59,48,.16), transparent 70%);
+      opacity:0;
+      filter: blur(2px);
+      transition: opacity .16s ease;
+      pointer-events:none;
+      z-index:1;
+    }
+    .btn::after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius:inherit;
+      border:1px solid rgba(255,255,255,.10);
+      opacity:0;
+      transition: opacity .16s ease;
+      pointer-events:none;
+      z-index:1;
+    }
+    .btn:hover,
+    .btn:focus-visible,
+    .btn.is-active{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 14px 42px rgba(0,0,0,.38);
+    }
+    .btn:hover::before,
+    .btn:focus-visible::before,
+    .btn.is-active::before{opacity:1}
+    .btn:hover::after,
+    .btn:focus-visible::after,
+    .btn.is-active::after{opacity:1}
+    .btn:active{
+      transform: translateY(0) scale(.985);
+      box-shadow: 0 10px 28px rgba(0,0,0,.32);
+    }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border:none;
+      color:#0b0b0f;
+      box-shadow: 0 10px 30px rgba(255,59,48,.18);
+    }
+    .btn-primary:hover{ box-shadow: 0 14px 42px rgba(255,59,48,.22); }
+    .btn-ghost{background: rgba(255,255,255,.06); color:var(--text)}
+
+    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:rgba(245,245,247,.78);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
     .stats{
       display:grid; grid-template-columns: repeat(3, 1fr);
       gap:10px; margin-top:18px;
@@ -332,7 +323,97 @@
     .stat b{display:block; font-size:18px}
     .stat span{color:var(--muted); font-size:12px}
 
+    /* ✅ 新增：填充左侧空缺的「群里能快速得到」板块（只影响 hero-card 内部） */
+    .hero-pad{
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      position:relative;
+      overflow:hidden;
+      flex:1;                 /* ✅ 自动吃掉剩余高度，填充空白但不挤压其他模块 */
+      display:flex;
+      flex-direction:column;
+      justify-content:center; /* ✅ 空间大时更居中，视觉更得体 */
+      min-height: 130px;      /* ✅ 保底高度，避免太“薄” */
+    }
+    .hero-pad::before{
+      content:"";
+      position:absolute;
+      inset:-50px;
+      background:
+        radial-gradient(520px 240px at 15% 20%, rgba(255,159,10,.14), transparent 60%),
+        radial-gradient(520px 240px at 85% 80%, rgba(255,59,48,.12), transparent 60%);
+      filter: blur(18px);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .hero-pad-head{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .hero-pad-title{
+      font-weight:850;
+      font-size:15px; /* ✅ 比右侧那块略大一点，撑住空间 */
+      color: rgba(245,245,247,.92);
+      letter-spacing:.2px;
+    }
+    .hero-pad-chip{
+      font-size:12px;
+      color: rgba(245,245,247,.72);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .hero-pad-grid{
+      position:relative;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width:520px){ .hero-pad-grid{grid-template-columns:1fr} }
+    .hero-pad-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+    .hero-pad-ico{
+      width:28px; height:28px;
+      border-radius:10px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,159,10,.22);
+      background: rgba(255,159,10,.12);
+      flex:0 0 auto;
+      font-size:14px;
+    }
+    .hero-pad-item b{
+      display:block;
+      font-size:13px;
+      margin:0 0 2px;
+      color: rgba(245,245,247,.92);
+      line-height:1.2;
+    }
+    .hero-pad-item span{
+      display:block;
+      font-size:12px;
+      color: rgba(245,245,247,.68);
+      line-height:1.35;
+    }
+
     .divider{height:1px; background:rgba(255,255,255,.10); margin:14px 0}
+    /* ✅ 保持你原来的“底部对齐”逻辑不变 */
+    .hero-card .divider{ margin-top:auto; }
 
     .pill-dash{
       display:inline-flex; align-items:center; gap:10px;
@@ -343,20 +424,7 @@
       font-size:13px;
     }
 
-    .pill{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);
-      color:rgba(245,245,247,.78);
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-
+    /* Poster card (right) */
     .poster-card{
       padding:12px;
       overflow:hidden;
@@ -365,6 +433,7 @@
       display:flex;
       flex-direction:column;
       gap:10px;
+      align-self:stretch;
     }
     @media(max-width:920px){
       .poster-card{max-width:100%; justify-self:stretch;}
@@ -386,7 +455,7 @@
       max-height:520px;
       object-fit:cover;
     }
-    .poster-link:hover .poster-img{transform: scale(1.02);}
+    .poster-link:hover .poster-img{transform: scale(1.02)}
     .placeholder{
       padding:18px; text-align:center; color:var(--muted); font-size:14px;
       border-radius:14px;
@@ -394,6 +463,169 @@
       background: rgba(0,0,0,.12);
     }
 
+    /* Poster fill block */
+    .poster-fill{
+      margin-top:auto;
+      border-top:1px solid rgba(255,255,255,.10);
+      padding-top:12px;
+    }
+    .poster-fill-box{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      border-radius:14px;
+      padding:12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .poster-fill-box::before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background:
+        radial-gradient(420px 200px at 12% 20%, rgba(255,159,10,.16), transparent 60%),
+        radial-gradient(420px 200px at 88% 70%, rgba(255,59,48,.14), transparent 60%);
+      filter: blur(18px);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .poster-fill-head{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .poster-fill-title{
+      font-weight:800;
+      font-size:14px;
+      color:rgba(245,245,247,.92);
+    }
+    .poster-fill-chip{
+      font-size:12px;
+      color:rgba(245,245,247,.72);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .poster-fill-list{
+      position:relative;
+      margin:0;
+      padding-left:18px;
+    }
+    .poster-fill-list li{
+      margin:6px 0;
+      color:rgba(245,245,247,.72);
+      font-size:13px;
+    }
+    .poster-fill-actions{
+      position:relative;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .poster-fill-actions .btn{padding:10px 12px}
+
+    /* Coilover ad card */
+    .ad-card{
+      grid-column: 1 / -1;
+      padding:14px;
+    }
+    .ad-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(700px 220px at 18% 35%, rgba(255,159,10,.12), transparent 60%),
+        radial-gradient(760px 240px at 78% 55%, rgba(255,59,48,.12), transparent 62%);
+      opacity:.65;
+    }
+    .ad-inner{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 900px){ .ad-inner{ grid-template-columns: 1fr; } }
+    .ad-media{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      border-radius:14px;
+      overflow:hidden;
+      position:relative;
+      cursor: zoom-in;
+      min-height: 210px;
+    }
+    .ad-media:hover .ad-img{ transform: scale(1.01); }
+    .ad-img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit: contain;
+      background: rgba(0,0,0,.22);
+      transform: scale(1);
+      transition: transform .25s ease;
+      padding:10px;
+    }
+    .ad-badge{
+      position:absolute;
+      top:10px; left:10px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(8px);
+      color: rgba(245,245,247,.90);
+      font-size:12px;
+      font-weight:700;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      white-space:nowrap;
+    }
+    .ad-badge i{
+      display:inline-grid;
+      place-items:center;
+      width:18px; height:18px;
+      border-radius:6px;
+      background: rgba(255,159,10,.18);
+      border:1px solid rgba(255,159,10,.22);
+      font-style:normal;
+    }
+    .ad-copy{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      border-radius:14px;
+      padding:14px 14px 12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .ad-title{margin:0; font-size:18px; line-height:1.25}
+    .ad-desc{margin:0; color: var(--muted); font-size:14px}
+    .ad-list{margin:10px 0 0; padding-left:18px}
+    .ad-list li{margin:6px 0; color: rgba(245,245,247,.78); font-size:13px}
+    .ad-foot{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .ad-note{color: rgba(245,245,247,.62); font-size:12px}
+
+    /* Sections */
+    section{padding:26px 0}
     .quick{padding:0 0 22px}
     .quick h2{
       margin:0 0 12px;
@@ -408,29 +640,29 @@
       left:0; right:0; bottom:0;
       height:1px;
       border-radius:999px;
-      background: linear-gradient(90deg,
-        transparent,
-        rgba(245,245,247,.18),
-        rgba(255,159,10,.22),
-        transparent
-      );
+      background: linear-gradient(90deg, transparent, rgba(245,245,247,.18), rgba(255,159,10,.22), transparent);
       transform: scaleX(.22);
       transform-origin:center;
       opacity:0;
       transition: transform .85s ease, opacity .85s ease;
     }
-    .quick h2.show::after{
-      transform: scaleX(1);
-      opacity:1;
-    }
+    .quick h2.show::after{transform: scaleX(1); opacity:1}
 
-    .mini{
-      color:rgba(245,245,247,.72);
-      font-size:13px;
-      margin-top:6px;
-    }
+    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+    @media (max-width: 900px){.grid-3{grid-template-columns:1fr}}
 
-    section{padding:26px 0}
+    .item{padding:16px}
+    .item h3{margin:0 0 6px; font-size:16px}
+    .item p{margin:0; color:var(--muted); font-size:14px}
+    .mini{color:rgba(245,245,247,.72); font-size:13px; margin-top:6px}
+    .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      background: rgba(255,59,48,.12);
+      border:1px solid rgba(255,59,48,.25);
+      margin-bottom:10px;
+      font-size:18px;
+    }
 
     .section-title{
       display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
@@ -440,43 +672,19 @@
     }
     .section-title h2{margin:0; font-size:24px}
     .section-title p{margin:0; color:var(--muted); font-size:14px}
-
     .section-title::after{
       content:"";
       position:absolute;
       left:0; right:0; bottom:0;
       height:1px;
       border-radius:999px;
-      background: linear-gradient(90deg,
-        transparent,
-        rgba(245,245,247,.16),
-        rgba(255,159,10,.20),
-        transparent
-      );
+      background: linear-gradient(90deg, transparent, rgba(245,245,247,.16), rgba(255,159,10,.20), transparent);
       transform: scaleX(.22);
       transform-origin:center;
       opacity:0;
       transition: transform .9s ease, opacity .9s ease;
     }
-    .section-title.show::after{
-      transform: scaleX(1);
-      opacity:1;
-    }
-
-    .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
-    @media (max-width: 900px){.grid-3{grid-template-columns:1fr}}
-
-    .item{padding:16px}
-    .item h3{margin:0 0 6px; font-size:16px}
-    .item p{margin:0; color:var(--muted); font-size:14px}
-    .icon{
-      width:36px; height:36px; border-radius:12px;
-      display:grid; place-items:center;
-      background: rgba(255,59,48,.12);
-      border:1px solid rgba(255,59,48,.25);
-      margin-bottom:10px;
-      font-size:18px;
-    }
+    .section-title.show::after{transform: scaleX(1); opacity:1}
 
     .two-col{display:grid; grid-template-columns: 1fr 1fr; gap:14px}
     @media (max-width:900px){.two-col{grid-template-columns:1fr}}
@@ -513,7 +721,7 @@
     }
     .small{font-size:12px; color:rgba(245,245,247,.55)}
 
-    /* 海报全屏预览 Modal */
+    /* Modal */
     .modal{
       position:fixed;
       inset:0;
@@ -524,7 +732,6 @@
       background: rgba(0,0,0,.72);
       z-index:9999;
       backdrop-filter: blur(6px);
-
       opacity:0;
       visibility:hidden;
       pointer-events:none;
@@ -546,12 +753,10 @@
       background: rgba(15,15,20,.55);
       box-shadow: 0 22px 80px rgba(0,0,0,.6);
       overflow:hidden;
-
       transform: translateY(8px);
       transition: transform .22s ease;
     }
-    .modal.open .modal-inner{ transform: translateY(0); }
-
+    .modal.open .modal-inner{transform: translateY(0)}
     .modal-bar{
       display:flex;
       align-items:center;
@@ -601,12 +806,8 @@
       padding:0 14px 12px;
     }
 
-    /* reveal 滚动渐入 */
-    .reveal{
-      opacity:0;
-      transform: translateY(14px);
-      filter: blur(2px);
-    }
+    /* Reveal */
+    .reveal{opacity:0; transform: translateY(14px); filter: blur(2px)}
     .reveal.show{
       opacity:1;
       transform: translateY(0);
@@ -631,9 +832,7 @@
     .hero-card h1{ animation-delay:.08s; }
     .hero-card .sub{ animation-delay:.14s; }
     .hero-card .cta-row{ animation-delay:.20s; }
-    @keyframes heroIn{
-      to{ opacity:1; transform: translateY(0); }
-    }
+    @keyframes heroIn{ to{ opacity:1; transform: translateY(0); } }
 
     :focus-visible{
       outline: 2px solid rgba(255,159,10,.75);
@@ -646,6 +845,289 @@
       *{ animation:none !important; transition:none !important; }
       .reveal{ opacity:1; transform:none; filter:none; }
       .top-progress{ display:none; }
+    }
+
+    /* ✅ 左侧拉长后：字体比例轻微优化（不改变风格） */
+    .hero-card .kicker{font-size:12px}
+    .hero-card h1{font-size:42px; line-height:1.08}
+    @media (max-width:520px){ .hero-card h1{font-size:34px} }
+    .hero-card .sub{font-size:15px}
+    .hero-card .stat b{font-size:17px}
+
+    /* =========================================================
+       ✅ 只更换：边栏卡片（更高级的玻璃卡 + 微光边缘）
+       ========================================================= */
+    .sidebar{
+      position:fixed;
+      top:50%;
+      transform: translateY(-50%);
+      z-index:45;
+      width: 220px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      pointer-events:auto;
+    }
+    .sidebar.left{
+      left: max(14px, env(safe-area-inset-left));
+    }
+    .sidebar.right{
+      right: max(14px, env(safe-area-inset-right));
+    }
+    @media (max-width: 1280px){
+      .sidebar{display:none;}
+    }
+
+    .s-card{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: 0 18px 60px rgba(0,0,0,.48);
+      overflow:hidden;
+      position:relative;
+      padding: 14px;
+      backdrop-filter: blur(10px);
+    }
+    .s-card::before{
+      content:"";
+      position:absolute;
+      inset:-50px;
+      background:
+        radial-gradient(520px 240px at 20% 20%, rgba(255,159,10,.14), transparent 60%),
+        radial-gradient(520px 240px at 80% 80%, rgba(255,59,48,.12), transparent 60%);
+      filter: blur(18px);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .s-head{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .s-title{
+      font-weight:850;
+      font-size:13px;
+      letter-spacing:.2px;
+      color: rgba(245,245,247,.92);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .s-dot{
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(52,199,89,.85);
+      box-shadow: 0 0 16px rgba(52,199,89,.35);
+      flex:0 0 auto;
+    }
+    .s-chip{
+      font-size:12px;
+      color: rgba(245,245,247,.70);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      padding:4px 8px;
+      border-radius:999px;
+      white-space:nowrap;
+      position:relative;
+    }
+    .s-mini{
+      position:relative;
+      color: rgba(245,245,247,.70);
+      font-size:12px;
+      line-height:1.45;
+      margin:0;
+    }
+    .s-list{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:10px;
+    }
+    .s-link{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      text-decoration:none;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      transition: transform .14s ease, border-color .14s ease, background .14s ease;
+    }
+    .s-link:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+    }
+    .s-link b{
+      font-size:12px;
+      color: rgba(245,245,247,.88);
+      margin:0;
+      font-weight:800;
+    }
+    .s-link span{
+      font-size:12px;
+      color: rgba(245,245,247,.62);
+      white-space:nowrap;
+    }
+    .s-link i{
+      width:26px; height:26px;
+      border-radius:10px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,159,10,.20);
+      background: rgba(255,159,10,.10);
+      font-style:normal;
+      flex:0 0 auto;
+    }
+    .s-actions{
+      position:relative;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .s-btn{
+      flex:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      color: rgba(245,245,247,.88);
+      font-weight:800;
+      font-size:12px;
+      cursor:pointer;
+      text-decoration:none;
+      transition: transform .14s ease, border-color .14s ease, background .14s ease;
+    }
+    .s-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+    }
+    .s-btn.primary{
+      border:none;
+      color:#0b0b0f;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 14px 44px rgba(255,59,48,.18);
+    }
+    .s-btn.primary:hover{ box-shadow: 0 18px 56px rgba(255,59,48,.22); }
+    .s-foot{
+      position:relative;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px solid rgba(255,255,255,.10);
+      color: rgba(245,245,247,.58);
+      font-size:11px;
+      line-height:1.35;
+    }
+
+    /* =========================================================
+       ✅ 只更换：右侧滚动进度 + TOP 按钮（更官方高级）
+       - 玻璃方圆角 + 外圈细进度环（与页面配色一致）
+       ========================================================= */
+    .to-top{
+      --p: 0; /* 0-100 */
+      position:fixed;
+      right: max(16px, env(safe-area-inset-right));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      z-index:70;
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 70px rgba(0,0,0,.55);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      opacity:0;
+      transform: translateY(8px) scale(.98);
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease, background .18s ease, border-color .18s ease;
+      isolation:isolate;
+    }
+    .to-top.show{
+      opacity:1;
+      transform: translateY(0) scale(1);
+      pointer-events:auto;
+    }
+    .to-top:hover{
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.18);
+    }
+    .to-top:active{ transform: translateY(0) scale(.985); }
+
+    .to-top .ring{
+      position:absolute;
+      inset:-2px;
+      border-radius: 20px;
+      background:
+        conic-gradient(from 180deg,
+          rgba(255,159,10,.85) calc(var(--p)*1%),
+          rgba(255,255,255,.14) 0
+        );
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+      opacity:.9;
+      pointer-events:none;
+      z-index:1;
+    }
+    .to-top .glow{
+      position:absolute;
+      inset:-18px;
+      background:
+        radial-gradient(140px 80px at 50% 60%, rgba(255,59,48,.10), transparent 65%),
+        radial-gradient(160px 90px at 55% 35%, rgba(255,159,10,.10), transparent 70%);
+      filter: blur(18px);
+      opacity:.6;
+      pointer-events:none;
+      z-index:0;
+    }
+    .to-top .icon{
+      width:auto; height:auto;
+      margin:0;
+      border:none;
+      background: transparent;
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      color: rgba(245,245,247,.92);
+      z-index:2;
+      line-height:1;
+      text-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .to-top .hint{
+      position:absolute;
+      right: 60px;
+      bottom: 50%;
+      transform: translateY(50%);
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+      color: rgba(245,245,247,.82);
+      font-size:12px;
+      white-space:nowrap;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .16s ease, transform .16s ease;
+      transform-origin:right center;
+      z-index:2;
+    }
+    .to-top:hover .hint{
+      opacity:1;
+      transform: translateY(50%) translateX(-2px);
     }
   </style>
 </head>
@@ -678,11 +1160,207 @@
     </div>
   </header>
 
+  <!-- ✅ 边栏卡片（左右两侧，不影响页面原内容布局） -->
+  <aside class="sidebar left" aria-label="Sidebar Left">
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-title">
+          <span class="s-dot" aria-hidden="true"></span>
+          <span data-cn="野火社 · 快速入口" data-en="Wildfire · Quick Access">野火社 · 快速入口</span>
+        </div>
+        <span class="s-chip" data-cn="官方" data-en="Official">官方</span>
+      </div>
+      <p class="s-mini"
+         data-cn="更少打扰、更快到达：把常用动作放在侧边。"
+         data-en="Less distraction, faster access: common actions live here.">
+        更少打扰、更快到达：把常用动作放在侧边。
+      </p>
+
+      <div class="s-actions">
+        <a class="s-btn primary" href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI" target="_blank"
+           data-cn="🔥 WhatsApp 进群" data-en="🔥 Join WhatsApp">
+          🔥 <span data-cn="WhatsApp 进群" data-en="Join WhatsApp">WhatsApp 进群</span>
+        </a>
+        <button class="s-btn" type="button" id="copyWeChatBtn"
+                data-cn="📩 复制微信号" data-en="📩 Copy WeChat">
+          📩 <span data-cn="复制微信号" data-en="Copy WeChat">复制微信号</span>
+        </button>
+      </div>
+
+      <div class="s-foot">
+        <span data-cn="微信：Sn20xxf（点击复制）" data-en="WeChat: Sn20xxf (click to copy)">微信：Sn20xxf（点击复制）</span>
+      </div>
+    </div>
+
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-title" data-cn="📌 新手三件事" data-en="📌 3 things for beginners">📌 新手三件事</div>
+        <span class="s-chip" data-cn="建议" data-en="Tips">建议</span>
+      </div>
+
+      <div class="s-list">
+        <a class="s-link" href="#pain">
+          <i>🧾</i>
+          <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+            <b data-cn="先看常见坑" data-en="See common traps">先看常见坑</b>
+            <span data-cn="避免被乱报价" data-en="Avoid random pricing">避免被乱报价</span>
+          </div>
+          <span>›</span>
+        </a>
+
+        <a class="s-link" href="#benefits">
+          <i>✅</i>
+          <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+            <b data-cn="我们能做什么" data-en="What we offer">我们能做什么</b>
+            <span data-cn="保养/选店/改装" data-en="Service/workshop/mods">保养/选店/改装</span>
+          </div>
+          <span>›</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="sidebar right" aria-label="Sidebar Right">
+    <div class="s-card">
+      <div class="s-head">
+        <div class="s-title" data-cn="🧭 页面导航" data-en="🧭 Navigation">🧭 页面导航</div>
+        <span class="s-chip" data-cn="快捷" data-en="Quick">快捷</span>
+      </div>
+
+      <div class="s-list">
+        <a class="s-link" href="#about">
+          <i>🔥</i>
+          <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+            <b data-cn="我们是谁" data-en="About us">我们是谁</b>
+            <span data-cn="社群定位" data-en="Community focus">社群定位</span>
+          </div>
+          <span>›</span>
+        </a>
+
+        <a class="s-link" href="#join">
+          <i>🚗</i>
+          <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+            <b data-cn="加入我们" data-en="Join">加入我们</b>
+            <span data-cn="一键进群" data-en="One-tap entry">一键进群</span>
+          </div>
+          <span>›</span>
+        </a>
+      </div>
+
+      <div class="s-foot"
+           data-cn="提示：右下角 TOP 按钮带滚动进度环。"
+           data-en="Tip: Bottom-right TOP button includes a progress ring.">
+        提示：右下角 TOP 按钮带滚动进度环。
+      </div>
+    </div>
+
+    <!-- ✅ 仅替换这一张卡片：把“质感说明”换成你图片里的内容（其余完全不动） -->
+    <div class="s-card">
+      <!-- 入群须知 -->
+      <div class="s-head" style="margin-bottom:8px;">
+        <div class="s-title">
+          <span class="s-dot" aria-hidden="true"></span>
+          <span data-cn="✅ 入群须知（看完更好玩）" data-en="✅ Group rules (30s read)">✅ 入群须知（看完更好玩）</span>
+        </div>
+        <span class="s-chip" data-cn="30秒" data-en="30s">30秒</span>
+      </div>
+
+      <ul style="position:relative; margin:0; padding-left:18px;">
+        <li data-cn="发报价/单据：请打码个人信息（电话/车牌/地址）"
+            data-en="Posting quotes/receipts: blur personal info (phone/plate/address)">
+          发报价/单据：请打码个人信息（电话/车牌/地址）
+        </li>
+        <li data-cn="提问尽量带：车型/年份/预算/用途/现象（越清晰越准）"
+            data-en="When asking: model/year/budget/use-case/symptoms (clear = accurate)">
+          提问尽量带：车型/年份/预算/用途/现象（越清晰越准）
+        </li>
+        <li data-cn="不引战/不攻击/不广告；分享经验优先"
+            data-en="No hate/no fights/no ads; experience-sharing first">
+          不引战/不攻击/不广告；分享经验优先
+        </li>
+      </ul>
+
+      <div style="position:relative; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+        <div style="border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.14); border-radius:14px; padding:10px;">
+          <div style="font-weight:850; font-size:12px; color:rgba(245,245,247,.90); margin-bottom:6px;"
+               data-cn="推荐格式" data-en="Suggested format">推荐格式</div>
+          <div style="font-size:12px; color:rgba(245,245,247,.65); line-height:1.35;">
+            <code style="color:rgba(245,245,247,.88); background:rgba(255,255,255,.06); padding:2px 6px; border-radius:8px; border:1px solid rgba(255,255,255,.10);">
+              [车型] / [问题] / [预算] / [地区]
+            </code>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.14); border-radius:14px; padding:10px;">
+          <div style="font-weight:850; font-size:12px; color:rgba(245,245,247,.90); margin-bottom:6px;"
+               data-cn="禁区" data-en="No-go">禁区</div>
+          <div style="font-size:12px; color:rgba(245,245,247,.65); line-height:1.35;"
+               data-cn="人身攻击、引战、刷屏、广告"
+               data-en="Personal attacks, drama, spam, ads">
+            人身攻击、引战、刷屏、广告
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px; background:rgba(255,255,255,.10); margin:12px 0;"></div>
+
+      <!-- 快速入口 & 本周小目标 -->
+      <div class="s-head" style="margin-bottom:8px;">
+        <div class="s-title" data-cn="⚡ 快速入口 & 本周小目标" data-en="⚡ Quick access & weekly goal">⚡ 快速入口 & 本周小目标</div>
+        <span class="s-chip" data-cn="新手友好" data-en="Beginner">新手友好</span>
+      </div>
+
+      <div style="position:relative; display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div style="border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.14); border-radius:14px; padding:10px;">
+          <div style="font-weight:850; font-size:12px; color:rgba(245,245,247,.90); margin-bottom:4px;"
+               data-cn="1）先看避坑" data-en="1) Start with traps">1）先看避坑</div>
+          <div style="font-size:12px; color:rgba(245,245,247,.65); line-height:1.35;"
+               data-cn="修车前先问清问题，避免被动项"
+               data-en="Clarify before service; avoid extra add-ons">
+            修车前先问清问题，避免被动项
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.14); border-radius:14px; padding:10px;">
+          <div style="font-weight:850; font-size:12px; color:rgba(245,245,247,.90); margin-bottom:4px;"
+               data-cn="2）再看价格" data-en="2) Then check prices">2）再看价格</div>
+          <div style="font-size:12px; color:rgba(245,245,247,.65); line-height:1.35;"
+               data-cn="常见项目区间：轮胎/刹车/机油/避震"
+               data-en="Typical ranges: tyres/brakes/oil/suspension">
+            常见项目区间：轮胎/刹车/机油/避震
+          </div>
+        </div>
+      </div>
+
+      <div class="s-actions" style="margin-top:10px;">
+        <a class="s-btn" href="#pain" data-cn="常见问题" data-en="Common Q&A">常见问题</a>
+        <a class="s-btn" href="#benefits" data-cn="我能获得什么" data-en="What I get">我能获得什么</a>
+        <a class="s-btn primary" style="flex: 1 0 100%;" href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI" target="_blank"
+           data-cn="现在进群" data-en="Join now">
+          现在进群
+        </a>
+      </div>
+
+      <div class="s-foot">
+        <div data-cn="🎯 本周目标：整理一份“轮胎雨季推荐清单”（欢迎参与）"
+             data-en="🎯 Weekly goal: build a ‘rainy-season tyre shortlist’ (join in)">
+          🎯 本周目标：整理一份“轮胎雨季推荐清单”（欢迎参与）
+        </div>
+        <div style="margin-top:6px;"
+             data-cn="📍 约跑/聚会：KL / Kajang / Bangi / PJ（消息以群公告为准）"
+             data-en="📍 Meets/cruises: KL / Kajang / Bangi / PJ (check group announcements)">
+          📍 约跑/聚会：KL / Kajang / Bangi / PJ（消息以群公告为准）
+        </div>
+      </div>
+    </div>
+  </aside>
+
   <main>
     <div class="hero">
       <div class="wrap">
         <div class="hero-grid">
 
+          <!-- 左侧主卡片 -->
           <div class="card hero-card">
             <span class="kicker"
                   data-cn="🚘 马来西亚留学生汽车俱乐部 · 新手友好"
@@ -748,6 +1426,68 @@
               </div>
             </div>
 
+            <!-- ✅ 新增填充板块（填你圈出来的空白） -->
+            <div class="hero-pad">
+              <div class="hero-pad-head">
+                <div class="hero-pad-title"
+                     data-cn="✨ 群里你能快速得到"
+                     data-en="✨ What you’ll get fast">
+                  ✨ 群里你能快速得到
+                </div>
+                <span class="hero-pad-chip"
+                      data-cn="3 分钟上手"
+                      data-en="3-min start">
+                  3 分钟上手
+                </span>
+              </div>
+
+              <div class="hero-pad-grid">
+                <div class="hero-pad-item">
+                  <div class="hero-pad-ico">🧾</div>
+                  <div>
+                    <b data-cn="报价判断" data-en="Quote check">报价判断</b>
+                    <span data-cn="把报价/项目发群里，帮你看是否合理"
+                          data-en="Share the quote & items—get a sanity check">
+                      把报价/项目发群里，帮你看是否合理
+                    </span>
+                  </div>
+                </div>
+
+                <div class="hero-pad-item">
+                  <div class="hero-pad-ico">📍</div>
+                  <div>
+                    <b data-cn="选店建议" data-en="Workshop picks">选店建议</b>
+                    <span data-cn="KL/Kajang/PJ 常见店口碑与注意点"
+                          data-en="Common workshop options + what to watch for">
+                      KL/Kajang/PJ 常见店口碑与注意点
+                    </span>
+                  </div>
+                </div>
+
+                <div class="hero-pad-item">
+                  <div class="hero-pad-ico">⚙️</div>
+                  <div>
+                    <b data-cn="改装路线" data-en="Mod path">改装路线</b>
+                    <span data-cn="轮胎/刹车/避震：预算优先级怎么排"
+                          data-en="Tyres / brakes / suspension—budget priorities">
+                      轮胎/刹车/避震：预算优先级怎么排
+                    </span>
+                  </div>
+                </div>
+
+                <div class="hero-pad-item">
+                  <div class="hero-pad-ico">🆘</div>
+                  <div>
+                    <b data-cn="应急处理" data-en="Quick fixes">应急处理</b>
+                    <span data-cn="爆胎/亏电/灯亮：先做什么不做什么"
+                          data-en="Flat / dead battery / warning lights—what to do first">
+                      爆胎/亏电/灯亮：先做什么不做什么
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="divider"></div>
 
             <span class="pill-dash"
@@ -757,6 +1497,7 @@
             </span>
           </div>
 
+          <!-- 右侧海报卡片 -->
           <div class="card poster-card">
             <a class="poster-link" href="poster.png" onclick="openPoster(event)">
               <img class="poster-img"
@@ -775,9 +1516,126 @@
               </span>
               <code>poster.png</code>
             </div>
+
+            <div class="poster-fill">
+              <div class="poster-fill-box">
+                <div class="poster-fill-head">
+                  <div class="poster-fill-title"
+                       data-cn="🔥 群里热门：改装/避坑/选店"
+                       data-en="🔥 Hot in group: mods / avoid traps / workshop picks">
+                    🔥 群里热门：改装/避坑/选店
+                  </div>
+
+                  <span class="poster-fill-chip"
+                        data-cn="每周更新"
+                        data-en="Weekly">
+                    每周更新
+                  </span>
+                </div>
+
+                <ul class="poster-fill-list">
+                  <li data-cn="可调避震：高度/阻尼怎么调才不难受"
+                      data-en="Coilovers: how to set height/damping without ruining comfort">
+                    可调避震：高度/阻尼怎么调才不难受
+                  </li>
+                  <li data-cn="轮胎 & 刹车：预算内怎么选更安全"
+                      data-en="Tyres & brakes: best safe choices on a budget">
+                    轮胎 & 刹车：预算内怎么选更安全
+                  </li>
+                  <li data-cn="车行报价：哪些项目容易被乱报"
+                      data-en="Workshop quotes: items that are often overpriced">
+                    车行报价：哪些项目容易被乱报
+                  </li>
+                </ul>
+
+                <div class="poster-fill-actions">
+                  <a class="btn btn-ghost"
+                     href="#benefits"
+                     data-cn="看看我们能做什么"
+                     data-en="See what we offer">
+                    看看我们能做什么
+                  </a>
+
+                  <a class="btn btn-primary"
+                     href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
+                     target="_blank"
+                     data-cn="进群问改装建议"
+                     data-en="Ask in WhatsApp group">
+                    进群问改装建议
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
-        </div>
+          <!-- 可调避震宣传卡片（跨两列） -->
+          <div class="card ad-card">
+            <div class="ad-inner">
+              <a class="ad-media" href="coilover.png" onclick="openAd(event)">
+                <span class="ad-badge">
+                  <i>⚙️</i>
+                  <span data-cn="可调避震科普 · 高度/阻尼可调" data-en="Coilover 101 · Height & damping adjustable">
+                    可调避震科普 · 高度/阻尼可调
+                  </span>
+                </span>
+                <img class="ad-img"
+                     id="adThumb"
+                     src="coilover.png"
+                     alt="Adjustable Coilover Promotion"
+                     loading="lazy"
+                     decoding="async"
+                     onerror="this.parentElement.style.display='none';">
+              </a>
+
+              <div class="ad-copy">
+                <div>
+                  <h3 class="ad-title"
+                      data-cn="改车不盲目：Adjustable Coilover 到底“可调”在哪？"
+                      data-en="Don’t mod blindly: What is “adjustable” on a coilover?">
+                    改车不盲目：Adjustable Coilover 到底“可调”在哪？
+                  </h3>
+                  <p class="ad-desc"
+                     data-cn="可调避震的核心价值，是把“姿态、操控、舒适”做成可选择的平衡——适合日常代步，也能兼顾偶尔热血。"
+                     data-en="The point is choice: balance stance, handling, and comfort—good for daily driving, and spirited runs too.">
+                    可调避震的核心价值，是把“姿态、操控、舒适”做成可选择的平衡——适合日常代步，也能兼顾偶尔热血。
+                  </p>
+
+                  <ul class="ad-list">
+                    <li data-cn="高度可调：降低重心/改善姿态（别盲目“趴太低”）"
+                        data-en="Ride-height adjustable: stance & center of gravity (don’t slam blindly)">
+                      高度可调：降低重心/改善姿态（别盲目“趴太低”）
+                    </li>
+                    <li data-cn="阻尼可调：软一点更舒适，硬一点更支撑"
+                        data-en="Damping adjustable: softer for comfort, stiffer for support">
+                      阻尼可调：软一点更舒适，硬一点更支撑
+                    </li>
+                    <li data-cn="弯道更稳：减少侧倾，提升转向响应与路感"
+                        data-en="More stability in corners: less roll, sharper steering feel">
+                      弯道更稳：减少侧倾，提升转向响应与路感
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="ad-foot">
+                  <span class="ad-note"
+                        data-cn="📌 想改避震？先在群里问车型/预算/用途，我们帮你避坑。"
+                        data-en="📌 Planning suspension mods? Ask your model/budget/use-case in group—we’ll help you avoid traps.">
+                    📌 想改避震？先在群里问车型/预算/用途，我们帮你避坑。
+                  </span>
+
+                  <a class="btn btn-ghost"
+                     href="https://chat.whatsapp.com/IHUDcvPcabC6WqQHSFIVuI"
+                     target="_blank"
+                     data-cn="进群问改装建议"
+                     data-en="Ask in WhatsApp group">
+                    进群问改装建议
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /hero-grid -->
       </div>
     </div>
 
@@ -878,8 +1736,7 @@
             <p
               data-cn="一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，都能在这里找到同路人。"
               data-en="A car community built by international students in Malaysia—first cars, daily driving, performance, and mods.">
-              一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，
-              都能在这里找到同路人。
+              一个由马来西亚留学生组成的汽车社群：从新手第一辆车落地，到日常代步、性能玩家、改装交流，都能在这里找到同路人。
             </p>
             <ul>
               <li data-cn="懂修车的 / 玩轮胎、避震、改装的"
@@ -973,12 +1830,19 @@
     </footer>
   </main>
 
+  <!-- ✅ 右侧滚动进度 + TOP 按钮（更高级） -->
+  <button class="to-top" id="toTopBtn" type="button" aria-label="Back to top">
+    <span class="glow" aria-hidden="true"></span>
+    <span class="ring" aria-hidden="true"></span>
+    <span class="hint" data-cn="返回顶部" data-en="Back to top">返回顶部</span>
+    <span class="icon" aria-hidden="true">↑</span>
+  </button>
+
+  <!-- 海报预览 Modal -->
   <div class="modal" id="posterModal" aria-hidden="true">
     <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Poster Preview">
       <div class="modal-bar">
-        <div class="modal-title">
-          🖼️ <span data-cn="海报预览" data-en="Poster Preview">海报预览</span>
-        </div>
+        <div class="modal-title">🖼️ <span data-cn="海报预览" data-en="Poster Preview">海报预览</span></div>
         <button class="modal-close" onclick="closePoster()" data-cn="关闭" data-en="Close">关闭</button>
       </div>
       <div class="modal-content">
@@ -991,85 +1855,109 @@
     </div>
   </div>
 
+  <!-- 避震宣传图预览 Modal -->
+  <div class="modal" id="adModal" aria-hidden="true">
+    <div class="modal-inner" role="dialog" aria-modal="true" aria-label="Coilover Promo Preview">
+      <div class="modal-bar">
+        <div class="modal-title">🧩 <span data-cn="改装宣传图预览" data-en="Promo Preview">改装宣传图预览</span></div>
+        <button class="modal-close" onclick="closeAd()" data-cn="关闭" data-en="Close">关闭</button>
+      </div>
+      <div class="modal-content">
+        <img id="adModalImg" src="" alt="Promo Preview">
+      </div>
+      <div class="modal-hint" data-cn="提示：点击空白处或按 ESC 也可以关闭"
+           data-en="Tip: Click outside or press ESC to close">
+        提示：点击空白处或按 ESC 也可以关闭
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Year
     document.getElementById("y").textContent = new Date().getFullYear();
 
+    // Language switch
     function setLang(lang, btn){
       document.querySelectorAll('[data-cn]').forEach(el=>{
-        el.innerHTML = lang === 'cn'
-          ? el.getAttribute('data-cn')
-          : el.getAttribute('data-en');
+        el.innerHTML = (lang === 'cn') ? el.getAttribute('data-cn') : el.getAttribute('data-en');
       });
-
-      document.querySelectorAll('.lang-switch button').forEach(b=>{
-        b.classList.remove('active');
-      });
+      document.querySelectorAll('.lang-switch button').forEach(b=>b.classList.remove('active'));
       if(btn) btn.classList.add('active');
     }
 
-    function openPoster(e){
-      if(e) e.preventDefault();
+    // Modal helpers
+    function openModal(modalId, imgId, src){
+      const modal = document.getElementById(modalId);
+      const img = document.getElementById(imgId);
+      if(!modal || !img) return;
 
-      const thumb = document.getElementById('posterThumb');
-      if(!thumb || thumb.style.display === 'none') return;
-
-      const modal = document.getElementById('posterModal');
-      const modalImg = document.getElementById('posterModalImg');
-
-      modalImg.src = thumb.getAttribute('src') || 'poster.png';
+      img.src = src;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
-
-    function closePoster(){
-      const modal = document.getElementById('posterModal');
-      const modalImg = document.getElementById('posterModalImg');
+    function closeModal(modalId, imgId){
+      const modal = document.getElementById(modalId);
+      const img = document.getElementById(imgId);
+      if(!modal || !img) return;
 
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
-      modalImg.src = '';
+      img.src = '';
       document.body.style.overflow = '';
     }
 
-    document.getElementById('posterModal').addEventListener('click', (e)=>{
-      if(e.target.id === 'posterModal') closePoster();
+    function openPoster(e){
+      if(e) e.preventDefault();
+      const thumb = document.getElementById('posterThumb');
+      if(!thumb || thumb.style.display === 'none') return;
+      openModal('posterModal', 'posterModalImg', thumb.getAttribute('src') || 'poster.png');
+    }
+    function closePoster(){ closeModal('posterModal', 'posterModalImg'); }
+
+    function openAd(e){
+      if(e) e.preventDefault();
+      const thumb = document.getElementById('adThumb');
+      if(!thumb || thumb.style.display === 'none') return;
+      openModal('adModal', 'adModalImg', thumb.getAttribute('src') || 'coilover.png');
+    }
+    function closeAd(){ closeModal('adModal', 'adModalImg'); }
+
+    ['posterModal','adModal'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('click', (e)=>{
+        if(e.target.id !== id) return;
+        if(id === 'posterModal') closePoster();
+        if(id === 'adModal') closeAd();
+      });
     });
 
     document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape'){
-        const modal = document.getElementById('posterModal');
-        if(modal.classList.contains('open')) closePoster();
-      }
+      if(e.key !== 'Escape') return;
+      const pm = document.getElementById('posterModal');
+      const am = document.getElementById('adModal');
+      if(pm && pm.classList.contains('open')) closePoster();
+      if(am && am.classList.contains('open')) closeAd();
     });
 
     (function(){
       const header = document.querySelector('header');
       if(!header) return;
-      const onScroll = () => {
-        if(window.scrollY > 6) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-      };
+      const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 6);
       onScroll();
       window.addEventListener('scroll', onScroll, { passive:true });
     })();
 
     (function(){
-      const targets = document.querySelectorAll(
-        '.card, .section-title, section h2, footer .wrap, .hero-card, .poster-card'
-      );
-
+      const targets = document.querySelectorAll('.card, .section-title, section h2, footer .wrap, .hero-card, .poster-card');
       targets.forEach((el, i) => {
         el.classList.add('reveal');
-        const k = (i % 5) + 1;
-        el.classList.add('stagger-' + k);
+        el.classList.add('stagger-' + ((i % 5) + 1));
       });
 
       const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(reduce) {
-        targets.forEach(el => el.classList.add('show'));
-        return;
-      }
+      if(reduce){ targets.forEach(el => el.classList.add('show')); return; }
 
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1112,25 +2000,18 @@
       const navLinks = Array.from(document.querySelectorAll('.links a[href^="#"]'));
       if(!navLinks.length) return;
 
-      const sections = navLinks
-        .map(a => document.querySelector(a.getAttribute('href')))
-        .filter(Boolean);
+      const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
       if(!sections.length) return;
 
       function setActive(id){
-        navLinks.forEach(a => {
-          const href = a.getAttribute('href');
-          a.classList.toggle('active', href === '#' + id);
-        });
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
       }
-
       function getOffset(){
         const h = header ? header.getBoundingClientRect().height : 0;
         return Math.max(64, Math.min(120, h + 12));
       }
 
       let ticking = false;
-
       function update(){
         ticking = false;
         const offset = getOffset();
@@ -1140,19 +2021,11 @@
           const r = sec.getBoundingClientRect();
           const top = r.top - offset;
           const bottom = r.bottom - offset;
-
-          if(top <= 0 && bottom > 0){
-            current = sec;
-            break;
-          }
-          if(Math.abs(top) < Math.abs(current.getBoundingClientRect().top - offset)){
-            current = sec;
-          }
+          if(top <= 0 && bottom > 0){ current = sec; break; }
+          if(Math.abs(top) < Math.abs(current.getBoundingClientRect().top - offset)) current = sec;
         }
-
         if(current && current.id) setActive(current.id);
       }
-
       function onScroll(){
         if(ticking) return;
         ticking = true;
@@ -1162,29 +2035,22 @@
       window.addEventListener('scroll', onScroll, { passive:true });
       window.addEventListener('resize', onScroll, { passive:true });
 
-      navLinks.forEach(a=>{
-        a.addEventListener('click', ()=>{
-          const id = (a.getAttribute('href') || '').slice(1);
-          if(id) setActive(id);
-        });
-      });
+      navLinks.forEach(a=>a.addEventListener('click', ()=>{
+        const id = (a.getAttribute('href') || '').slice(1);
+        if(id) setActive(id);
+      }));
 
       const hash = (location.hash || '').slice(1);
       if(hash) setActive(hash);
-
       update();
     })();
 
-    /* ✅ 关键：手机“触碰也高亮”——给 .btn 加一个短暂 is-active */
     (function(){
-      const btns = document.querySelectorAll('.btn');
-      btns.forEach(el=>{
+      document.querySelectorAll('.btn').forEach(el=>{
         el.addEventListener('pointerdown', ()=>{
           el.classList.add('is-active');
           window.setTimeout(()=> el.classList.remove('is-active'), 260);
         }, {passive:true});
-
-        /* 让 span.btn-ghost 也能键盘触发一点反馈 */
         el.addEventListener('keydown', (e)=>{
           if(e.key === 'Enter' || e.key === ' '){
             el.classList.add('is-active');
@@ -1193,7 +2059,73 @@
         });
       });
     })();
+
+    /* ✅ 右下角滚动进度 + TOP 按钮逻辑（更顺滑、更高级） */
+    (function(){
+      const btn = document.getElementById('toTopBtn');
+      if(!btn) return;
+
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function setProgress(){
+        const doc = document.documentElement;
+        const scrollTop = window.scrollY || doc.scrollTop || 0;
+        const max = Math.max(1, (doc.scrollHeight - window.innerHeight));
+        const pct = Math.min(100, Math.max(0, (scrollTop / max) * 100));
+        btn.style.setProperty('--p', pct.toFixed(2));
+        btn.classList.toggle('show', scrollTop > 240);
+      }
+
+      let ticking = false;
+      function onScroll(){
+        if(ticking) return;
+        ticking = true;
+        requestAnimationFrame(()=>{ ticking = false; setProgress(); });
+      }
+
+      btn.addEventListener('click', ()=>{
+        if(reduce){
+          window.scrollTo(0,0);
+        }else{
+          window.scrollTo({ top:0, behavior:'smooth' });
+        }
+      });
+
+      window.addEventListener('scroll', onScroll, { passive:true });
+      window.addEventListener('resize', onScroll, { passive:true });
+      setProgress();
+    })();
+
+    /* ✅ 侧边栏：复制微信号（不影响主内容） */
+    (function(){
+      const wechat = 'Sn20xxf';
+      const btn = document.getElementById('copyWeChatBtn');
+      if(!btn) return;
+
+      btn.addEventListener('click', async ()=>{
+        try{
+          await navigator.clipboard.writeText(wechat);
+          btn.blur();
+          btn.innerHTML = '✅ ' + (document.querySelector('.lang-switch button.active')?.textContent === 'EN' ? 'Copied' : '已复制');
+          setTimeout(()=>{
+            btn.innerHTML = (document.querySelector('.lang-switch button.active')?.textContent === 'EN')
+              ? '📩 Copy WeChat'
+              : '📩 复制微信号';
+          }, 1100);
+        }catch(e){
+          btn.innerHTML = (document.querySelector('.lang-switch button.active')?.textContent === 'EN')
+            ? '⚠️ Copy failed'
+            : '⚠️ 复制失败';
+          setTimeout(()=>{
+            btn.innerHTML = (document.querySelector('.lang-switch button.active')?.textContent === 'EN')
+              ? '📩 Copy WeChat'
+              : '📩 复制微信号';
+          }, 1100);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
+ 
 
